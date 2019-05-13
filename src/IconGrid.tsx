@@ -22,23 +22,23 @@ interface ItemType {
 const griditems: Array<ItemType> = [
   {
     name: "Ben",
-    icon: <IOSIcon path={weather} />
+    icon: <IOSIcon name="Weather" path={weather} />
   },
   {
     name: "Joe",
-    icon: <IOSIcon path={wallet} />
+    icon: <IOSIcon name="Wallet" path={wallet} />
   },
   {
     name: "Ken",
-    icon: <IOSIcon path={settings} />
+    icon: <IOSIcon name="Settings" path={settings} />
   },
   {
     name: "Rod",
-    icon: <IOSIcon path={messages} />
+    icon: <IOSIcon name="Messages" path={messages} />
   },
   {
     name: "Bob",
-    icon: <IOSIcon path={reminders} />
+    icon: <IOSIcon name="Reminders" path={reminders} />
   }
 ];
 
@@ -52,21 +52,33 @@ interface StyleProps {
   opacity: SpringValue<number>;
 }
 
-export function IconGrid() {
-  const order = React.useRef(griditems.map((_, i) => i));
+interface IconGridProps {
+  items?: Array<ItemType>;
+  style?: any;
+  id: string;
+}
+
+export function IconGrid({
+  items = griditems,
+  style,
+  ...other
+}: IconGridProps) {
+  const order = React.useRef(items.map((_, i) => i));
   const [springs, setSprings] = useSprings(
-    griditems.length,
+    items.length,
     positions(order.current)
   );
 
   return (
     <div
       style={{
-        position: "relative",
-        zIndex: 10,
+        // position: "relative",
+        // zIndex: 10,
         padding: "0.75rem",
-        paddingTop: "50px"
+        paddingTop: "50px",
+        ...style
       }}
+      {...other}
     >
       {springs.map((styles: StyleProps, i: number) => {
         /**
@@ -74,10 +86,20 @@ export function IconGrid() {
          */
 
         function handleMove(state: StateType, down: boolean) {
+          // 1. get active droppable
+
+          // 2. get the target index for that droppable
+
+          // 3. if down,
+          // - update our drag position
+          // - insert item (or placeholder?) at index of target list
+
+          // 4. on release
+          // - remove item from previous list
           const curIndex = order.current.indexOf(i);
           const targetIndex = clamp(
             getTargetIndex(curIndex, state.delta[0], state.delta[1]),
-            griditems.length - 1
+            items.length - 1
           );
 
           const newOrder = swap(
@@ -107,8 +129,8 @@ export function IconGrid() {
 
         return (
           <Icon
-            key={griditems[i].name}
-            item={griditems[i]}
+            key={items[i].name}
+            item={items[i]}
             styles={styles}
             onMove={onMove}
             onEnd={onEnd}
@@ -197,9 +219,7 @@ function Icon({ styles, item: { name, icon }, onMove, onEnd }: ItemProps) {
 // measuring stuff and keeping it in state
 const containerWidth = 375 - 12 * 2;
 const bpr = 4;
-const containerHeight = 800;
-const rows = 8;
-const rh = containerHeight / rows; // row height
+const rh = 100; // row height
 const cw = containerWidth / bpr; // column width
 
 function positions(
@@ -215,7 +235,7 @@ function positions(
         ? {
             ...getDragPosition(curIndex!, delta![0], delta![1]),
             immediate: true,
-            zIndex: "1",
+            zIndex: "2000",
             scale: 1.1,
             opacity: 0.8
           }

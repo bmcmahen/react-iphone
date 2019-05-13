@@ -1,17 +1,22 @@
 import * as React from "react";
 
-function getTime() {
-  var d = new Date();
-  var m = d.getMinutes();
-  var h = d.getHours();
-  return h + ":" + m;
+function formatAMPM() {
+  const date = new Date();
+  var hours = date.getHours();
+  var minutes = date.getMinutes();
+  var ampm = hours >= 12 ? "pm" : "am";
+  hours = hours % 12;
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+  const min = minutes < 10 ? "0" + minutes : minutes;
+  var strTime = hours + ":" + min + " " + ampm;
+  return strTime;
 }
 
 export const Status = () => {
-  const [time, setTime] = React.useState(getTime());
+  const [time, setTime] = React.useState(formatAMPM());
   React.useEffect(() => {
     const timer = setInterval(() => {
-      setTime(getTime());
+      setTime(formatAMPM());
     }, 1000);
 
     return () => {

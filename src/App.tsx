@@ -57,7 +57,15 @@ export function IOS() {
         onTerminationRequest={onTerminationRequestParent}
       >
         <Pane>widget crap</Pane>
-        <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+        <div
+          style={{
+            position: "relative",
+
+            flex: 1,
+            display: "flex",
+            flexDirection: "column"
+          }}
+        >
           <GestureView
             className="Gesture__apps"
             id="child"
@@ -66,13 +74,23 @@ export function IOS() {
             onRequestChange={i => setChildIndex(i)}
           >
             <Pane>
-              <IconGrid />
+              <IconGrid id="icons1" />
             </Pane>
             <Pane>2</Pane>
             <Pane>3</Pane>
           </GestureView>
-          <Dots count={3} activeIndex={childIndex} />
-          <Dock />
+          <div
+            style={{
+              zIndex: 0,
+              position: "absolute",
+              bottom: 0,
+              left: 0,
+              right: 0
+            }}
+          >
+            <Dots count={3} activeIndex={childIndex} />
+            <Dock />
+          </div>
         </div>
       </GestureView>
     </div>
