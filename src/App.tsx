@@ -7,6 +7,7 @@ import "./styles.css";
 import { Dock } from "./Dock";
 import { IconGrid } from "./IconGrid";
 import { Status } from "./Status";
+import { DragContextProvider } from "./DragContext";
 
 export function IOS() {
   const [childIndex, setChildIndex] = React.useState(0);
@@ -47,52 +48,44 @@ export function IOS() {
       >
         <Status />
       </div>
-      <GestureView
-        className="Gesture__parent"
-        enableMouse
-        value={parentIndex}
-        id="parent"
-        onRequestChange={i => setParentIndex(i)}
-        onMoveShouldSet={onMoveShouldSetParent}
-        onTerminationRequest={onTerminationRequestParent}
-      >
-        <Pane>widget crap</Pane>
-        <div
-          style={{
-            position: "relative",
-
-            flex: 1,
-            display: "flex",
-            flexDirection: "column"
-          }}
+      <DragContextProvider>
+        <GestureView
+          className="Gesture__parent"
+          enableMouse
+          value={parentIndex}
+          id="parent"
+          onRequestChange={i => setParentIndex(i)}
+          onMoveShouldSet={onMoveShouldSetParent}
+          onTerminationRequest={onTerminationRequestParent}
         >
-          <GestureView
-            className="Gesture__apps"
-            id="child"
-            enableMouse
-            value={childIndex}
-            onRequestChange={i => setChildIndex(i)}
-          >
-            <Pane>
-              <IconGrid id="icons1" />
-            </Pane>
-            <Pane>2</Pane>
-            <Pane>3</Pane>
-          </GestureView>
+          <Pane>widget crap</Pane>
           <div
             style={{
-              zIndex: 0,
-              position: "absolute",
-              bottom: 0,
-              left: 0,
-              right: 0
+              flex: 1,
+              display: "flex",
+              flexDirection: "column"
             }}
           >
-            <Dots count={3} activeIndex={childIndex} />
-            <Dock />
+            <GestureView
+              className="Gesture__apps"
+              id="child"
+              enableMouse
+              value={childIndex}
+              onRequestChange={i => setChildIndex(i)}
+            >
+              <Pane>
+                <IconGrid id="icons1" />
+              </Pane>
+              <Pane>2</Pane>
+              <Pane>3</Pane>
+            </GestureView>
+            <div>
+              <Dots count={3} activeIndex={childIndex} />
+              <Dock />
+            </div>
           </div>
-        </div>
-      </GestureView>
+        </GestureView>
+      </DragContextProvider>
     </div>
   );
 }

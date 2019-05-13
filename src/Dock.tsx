@@ -14,7 +14,6 @@ export function Dock(props: DockProps) {
       <div className="Dock__content">
         <IconGrid
           id="dock"
-          style={{ paddingTop: 0 }}
           items={[
             {
               name: "Ben",

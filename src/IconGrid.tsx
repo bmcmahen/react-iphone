@@ -13,6 +13,8 @@ import settings from "./Icons/Settings.svg";
 import messages from "./Icons/Messages.svg";
 import reminders from "./Icons/Reminders.svg";
 import { Icon as IOSIcon } from "./Icons/Icon";
+import { useMeasure } from "./hooks/use-measure";
+import { DragContext } from "./DragContext";
 
 interface ItemType {
   name: string;
@@ -59,10 +61,24 @@ interface IconGridProps {
 }
 
 export function IconGrid({
+  id,
   items = griditems,
   style,
   ...other
 }: IconGridProps) {
+  const { register, remove, getCurrentDropId } = React.useContext(DragContext);
+  const ref = React.useRef<HTMLDivElement>(null);
+  const { bounds } = useMeasure(ref);
+
+  React.useEffect(() => {
+    console.log(id, bounds);
+    register(id, bounds);
+  }, [bounds, id]);
+
+  React.useEffect(() => {
+    return () => remove(id);
+  }, [id]);
+
   const order = React.useRef(items.map((_, i) => i));
   const [springs, setSprings] = useSprings(
     items.length,
@@ -71,11 +87,12 @@ export function IconGrid({
 
   return (
     <div
+      ref={ref}
       style={{
-        // position: "relative",
-        // zIndex: 10,
-        padding: "0.75rem",
-        paddingTop: "50px",
+        // padding: "0.75rem",
+        // paddingTop: "50px",
+        boxSizing: "border-box",
+        height: "100%",
         ...style
       }}
       {...other}
@@ -96,7 +113,24 @@ export function IconGrid({
 
           // 4. on release
           // - remove item from previous list
+
           const curIndex = order.current.indexOf(i);
+
+          const startPosition = getDragPosition(
+            curIndex,
+            state.delta[0],
+            state.delta[1],
+            true
+          );
+
+          const targetDropId = getCurrentDropId(
+            id,
+            startPosition.xy[0],
+            startPosition.xy[1]
+          );
+
+          console.log("target drop id", targetDropId);
+
           const targetIndex = clamp(
             getTargetIndex(curIndex, state.delta[0], state.delta[1]),
             items.length - 1
