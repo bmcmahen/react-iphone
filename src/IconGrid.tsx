@@ -13,12 +13,14 @@ import settings from "./Icons/Settings.svg";
 import messages from "./Icons/Messages.svg";
 import reminders from "./Icons/Reminders.svg";
 import { Icon as IOSIcon } from "./Icons/Icon";
+import findIndex from "lodash-es/findIndex";
 import { useMeasure } from "./hooks/use-measure";
 import { DragContext } from "./DragContext";
 
 interface ItemType {
   name: string;
   icon: any;
+  hide?: boolean;
 }
 
 const griditems: Array<ItemType> = [
@@ -60,18 +62,48 @@ interface IconGridProps {
   id: string;
 }
 
+interface PlaceholderType {
+  id: string;
+  x: number;
+  y: number;
+}
+
 export function IconGrid({
   id,
   items = griditems,
   style,
   ...other
 }: IconGridProps) {
-  const { register, remove, getCurrentDropId } = React.useContext(DragContext);
+  const {
+    register,
+    remove,
+    getCurrentDropId,
+    placeholder,
+    showPlaceholder
+  } = React.useContext(DragContext);
   const ref = React.useRef<HTMLDivElement>(null);
   const { bounds } = useMeasure(ref);
 
+  const order = React.useRef(griditems.map((_, i) => i));
+
+  const itemList = items;
+
+  const placeholderIndex = getPlaceholderIndex();
+
+  function getPlaceholderIndex() {
+    if (placeholder && placeholder.id === id) {
+      const i = getIndexFromCoordinates(placeholder.x, placeholder.y);
+      return i;
+    }
+    return null;
+  }
+
+  const [springs, setSprings] = useSprings(
+    itemList.length,
+    positions(order.current, placeholderIndex)
+  );
+
   React.useEffect(() => {
-    console.log(id, bounds);
     register(id, bounds);
   }, [bounds, id]);
 
@@ -79,11 +111,9 @@ export function IconGrid({
     return () => remove(id);
   }, [id]);
 
-  const order = React.useRef(items.map((_, i) => i));
-  const [springs, setSprings] = useSprings(
-    items.length,
-    positions(order.current)
-  );
+  React.useEffect(() => {
+    setSprings(positions(order.current, placeholderIndex));
+  }, [placeholderIndex, order.current, setSprings]);
 
   return (
     <div
@@ -129,7 +159,22 @@ export function IconGrid({
             startPosition.xy[1]
           );
 
-          console.log("target drop id", targetDropId);
+          if (targetDropId !== id && targetDropId) {
+            showPlaceholder(
+              id,
+              targetDropId,
+              startPosition.xy[0],
+              startPosition.xy[1]
+            );
+          } else {
+            // hidePlaceholder();
+          }
+
+          // need to be able to manipulate the other iconGrid from this position.
+
+          // if targetDropId !== thisDropId
+          // we need to tell render a placeholder element on the target
+          // id. On drop, we remove this grid item, and add one to the other.
 
           const targetIndex = clamp(
             getTargetIndex(curIndex, state.delta[0], state.delta[1]),
@@ -142,7 +187,16 @@ export function IconGrid({
             targetIndex
           ) as number[];
 
-          setSprings(positions(newOrder, down, i, curIndex, state.delta));
+          setSprings(
+            positions(
+              newOrder,
+              placeholderIndex,
+              down,
+              i,
+              curIndex,
+              state.delta
+            )
+          );
 
           if (!down) {
             order.current = newOrder;
@@ -163,8 +217,8 @@ export function IconGrid({
 
         return (
           <Icon
-            key={items[i].name}
-            item={items[i]}
+            key={itemList[i].name}
+            item={itemList[i]}
             styles={styles}
             onMove={onMove}
             onEnd={onEnd}
@@ -251,13 +305,14 @@ function Icon({ styles, item: { name, icon }, onMove, onEnd }: ItemProps) {
 
 // potentially make these things dynamic by actually
 // measuring stuff and keeping it in state
-const containerWidth = 375 - 12 * 2;
+const containerWidth = 375;
 const bpr = 4;
 const rh = 100; // row height
 const cw = containerWidth / bpr; // column width
 
 function positions(
   order: number[],
+  placeholderIndex: number | null,
   down?: boolean,
   originalIndex?: number,
   curIndex?: number,
@@ -274,7 +329,7 @@ function positions(
             opacity: 0.8
           }
         : {
-            ...getPositionForIndex(order.indexOf(i)),
+            ...getPositionForIndex(order.indexOf(i), placeholderIndex),
             immediate: false,
             zIndex: "0",
             scale: 1,
@@ -285,9 +340,11 @@ function positions(
   };
 }
 
-function getPositionForIndex(i: number) {
-  const left = (i % bpr) * cw;
-  const top = Math.floor(i / bpr) * rh;
+function getPositionForIndex(i: number, placeholderIndex: number | null) {
+  const index =
+    placeholderIndex != null ? (i >= placeholderIndex ? i + 1 : i) : i;
+  const left = (index % bpr) * cw;
+  const top = Math.floor(index / bpr) * rh;
   return {
     xy: [left, top],
     width: cw,
@@ -306,7 +363,7 @@ function getDragPosition(
     xy: [left, top],
     width,
     height
-  } = getPositionForIndex(startIndex);
+  } = getPositionForIndex(startIndex, null);
 
   // get current position by adding dy / dx to
   // the starting position
