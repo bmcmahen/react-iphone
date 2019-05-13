@@ -62,12 +62,6 @@ interface IconGridProps {
   id: string;
 }
 
-interface PlaceholderType {
-  id: string;
-  x: number;
-  y: number;
-}
-
 export function IconGrid({
   id,
   items = griditems,
@@ -78,6 +72,7 @@ export function IconGrid({
     register,
     remove,
     getCurrentDropId,
+    hidePlaceholder,
     placeholder,
     showPlaceholder
   } = React.useContext(DragContext);
@@ -91,7 +86,7 @@ export function IconGrid({
   const placeholderIndex = getPlaceholderIndex();
 
   function getPlaceholderIndex() {
-    if (placeholder && placeholder.id === id) {
+    if (placeholder && placeholder.targetId === id) {
       const i = getIndexFromCoordinates(placeholder.x, placeholder.y);
       return i;
     }
@@ -164,10 +159,11 @@ export function IconGrid({
               id,
               targetDropId,
               startPosition.xy[0],
-              startPosition.xy[1]
+              startPosition.xy[1],
+              curIndex
             );
           } else {
-            // hidePlaceholder();
+            hidePlaceholder();
           }
 
           // need to be able to manipulate the other iconGrid from this position.
@@ -209,6 +205,10 @@ export function IconGrid({
 
         function onEnd(state: StateType) {
           handleMove(state, false);
+
+          if (placeholder && placeholder.sourceId === id) {
+            setSprings(positionsWithDrop(order.current, placeholder));
+          }
         }
 
         function onMove(state: StateType) {
@@ -310,6 +310,49 @@ const bpr = 4;
 const rh = 100; // row height
 const cw = containerWidth / bpr; // column width
 
+interface PlaceholderState {
+  sourceId: string;
+  targetId: string;
+  x: number;
+  y: number;
+  sourceIndex: number;
+  rx: number; // relative position of final target
+  ry: number;
+}
+
+function positionsWithDrop(order: number[], placeholder: PlaceholderState) {
+  return (i: number) => {
+    const isSourceIndex = placeholder && placeholder.sourceIndex === i;
+
+    const shared = {
+      immediate: false,
+      zIndex: "0",
+      scale: 1,
+      opacity: 1
+    };
+
+    if (isSourceIndex) {
+      return {
+        ...shared,
+        xy: [placeholder.rx, placeholder.ry],
+        width: cw,
+        height: rh,
+        onRest: () => {
+          console.log("REMOVE and SWAP", i);
+        }
+      };
+    }
+
+    return {
+      ...getPositionForIndex(i, null),
+      immediate: false,
+      zIndex: "0",
+      scale: 1,
+      opacity: 1
+    };
+  };
+}
+
 function positions(
   order: number[],
   placeholderIndex: number | null,
@@ -340,7 +383,10 @@ function positions(
   };
 }
 
-function getPositionForIndex(i: number, placeholderIndex: number | null) {
+export function getPositionForIndex(
+  i: number,
+  placeholderIndex: number | null
+) {
   const index =
     placeholderIndex != null ? (i >= placeholderIndex ? i + 1 : i) : i;
   const left = (index % bpr) * cw;
@@ -386,6 +432,6 @@ function getTargetIndex(startIndex: number, dx: number, dy: number) {
   return getIndexFromCoordinates(cx, cy);
 }
 
-function getIndexFromCoordinates(x: number, y: number) {
+export function getIndexFromCoordinates(x: number, y: number) {
   return Math.floor(y / rh) * bpr + Math.floor(x / cw);
 }

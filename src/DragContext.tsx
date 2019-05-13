@@ -1,40 +1,70 @@
 import * as React from "react";
 import { Bounds } from "./hooks/use-measure";
+import { getIndexFromCoordinates, getPositionForIndex } from "./IconGrid";
 
 interface DragContextType {
   register: (id: string, bounds: Bounds) => void;
   remove: (id: string) => void;
   placeholder: PlaceholderState | null;
+  hidePlaceholder: () => void;
   getCurrentDropId: (id: string, x: number, y: number) => string | null;
   showPlaceholder: (
     sourceId: string,
     targetId: string,
     x: number,
-    y: number
+    y: number,
+    sourceIndex: number
+  ) => void;
+  onSwitchTargets: (
+    sourceId: string,
+    targetId: string,
+    x: number,
+    y: number,
+    sourceIndex: number,
+    targetIndex: number
   ) => void;
 }
 
 export const DragContext = React.createContext<DragContextType>({
   register: (id: string, bounds: any) => {},
   remove: (id: string) => {},
+  hidePlaceholder: () => {},
   placeholder: null,
   getCurrentDropId: (id: string, x: number, y: number): string | null => {
     return null;
   },
-  showPlaceholder: (id: string, targetId: string, x: number, y: number) => {}
+  showPlaceholder: (
+    id: string,
+    targetId: string,
+    x: number,
+    y: number,
+    sourceIndex: number
+  ) => {},
+  onSwitchTargets: (
+    sourceId: string,
+    targetId: string,
+    x: number,
+    y: number
+  ) => {}
 });
 
 interface Props {
   children: React.ReactNode;
+  onChange?: (sourceId: string, targetId: string, x: number, y: number) => void;
 }
 
 interface PlaceholderState {
-  id: string;
+  // sourceIndex: number;
+  sourceId: string;
+  targetId: string;
   x: number;
   y: number;
+  rx: number; // relative position of final target
+  ry: number;
+  sourceIndex: number;
 }
 
-export function DragContextProvider({ children }: Props) {
+export function DragContextProvider({ children, onChange }: Props) {
   const [placeholder, setPlaceholder] = React.useState<PlaceholderState | null>(
     null
   );
@@ -59,16 +89,57 @@ export function DragContextProvider({ children }: Props) {
     refs.current.delete(id);
   }
 
+  function hidePlaceholder() {
+    setPlaceholder(null);
+  }
+
+  function diffDropzones(sourceId: string, targetId: string) {
+    const sBounds = refs.current.get(sourceId)!;
+    const tBounds = refs.current.get(targetId)!;
+
+    return {
+      x: tBounds.left - sBounds.left,
+      y: tBounds.top - sBounds.top
+    };
+  }
+
   function showPlaceholder(
     sourceId: string,
     targetId: string,
     x: number,
-    y: number
+    y: number,
+    sourceIndex: number
   ) {
+    // placeholder should contain our
+    // - sourceId
+    // - targetIndex
+    // this way, the source icongrid can monitor if
+    // it should animate the current item to the target
+    // id, and then after the animation has finished,
+    // tell the context to actually replace the item.
+
     const { x: fx, y: fy } = getFixedPosition(sourceId, x, y);
+    const { x: rx, y: ry } = getRelativePosition(targetId, fx, fy);
+    const index = getIndexFromCoordinates(rx, ry);
+
+    const {
+      xy: [px, py]
+    } = getPositionForIndex(index, null);
+
+    const { x: dx, y: dy } = diffDropzones(sourceId, targetId);
+
+    const relativePosition = {
+      rx: px + dx,
+      ry: py + dy
+    };
+
     setPlaceholder({
-      id: targetId,
-      ...getRelativePosition(targetId, fx, fy)
+      sourceId,
+      targetId,
+      x: rx,
+      y: ry,
+      ...relativePosition,
+      sourceIndex
     });
   }
 
@@ -104,14 +175,23 @@ export function DragContextProvider({ children }: Props) {
     return current;
   }
 
+  function onSwitchTargets(
+    sourceId: string,
+    targetId: string,
+    x: number,
+    y: number
+  ) {}
+
   return (
     <DragContext.Provider
       value={{
         register,
         showPlaceholder,
+        hidePlaceholder,
         remove,
         getCurrentDropId,
-        placeholder
+        placeholder,
+        onSwitchTargets
       }}
     >
       {children}
