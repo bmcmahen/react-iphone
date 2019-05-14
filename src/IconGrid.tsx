@@ -7,44 +7,17 @@ import {
 } from "react-gesture-responder";
 import clamp from "lodash-es/clamp";
 import swap from "./move";
-import weather from "./Icons/Weather.svg";
-import wallet from "./Icons/Wallet.svg";
-import settings from "./Icons/Settings.svg";
-import messages from "./Icons/Messages.svg";
-import reminders from "./Icons/Reminders.svg";
+
 import { Icon as IOSIcon } from "./Icons/Icon";
 import findIndex from "lodash-es/findIndex";
 import { useMeasure } from "./hooks/use-measure";
 import { DragContext } from "./DragContext";
 
-interface ItemType {
+export interface ItemType {
   name: string;
   icon: any;
   hide?: boolean;
 }
-
-const griditems: Array<ItemType> = [
-  {
-    name: "Ben",
-    icon: <IOSIcon name="Weather" path={weather} />
-  },
-  {
-    name: "Joe",
-    icon: <IOSIcon name="Wallet" path={wallet} />
-  },
-  {
-    name: "Ken",
-    icon: <IOSIcon name="Settings" path={settings} />
-  },
-  {
-    name: "Rod",
-    icon: <IOSIcon name="Messages" path={messages} />
-  },
-  {
-    name: "Bob",
-    icon: <IOSIcon name="Reminders" path={reminders} />
-  }
-];
 
 interface StyleProps {
   [x: string]: SpringValue<any>;
@@ -57,17 +30,12 @@ interface StyleProps {
 }
 
 interface IconGridProps {
-  items?: Array<ItemType>;
+  items: Array<ItemType>;
   style?: any;
   id: string;
 }
 
-export function IconGrid({
-  id,
-  items = griditems,
-  style,
-  ...other
-}: IconGridProps) {
+export function IconGrid({ id, items, style, ...other }: IconGridProps) {
   const {
     register,
     remove,
@@ -80,7 +48,7 @@ export function IconGrid({
   const ref = React.useRef<HTMLDivElement>(null);
   const { bounds } = useMeasure(ref);
 
-  const order = React.useRef(griditems.map((_, i) => i));
+  const order = React.useRef(items.map((_, i) => i));
 
   const itemList = items;
 

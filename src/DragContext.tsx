@@ -38,10 +38,10 @@ export const DragContext = React.createContext<DragContextType>({
 
 interface Props {
   children: React.ReactNode;
-  onChange?: (sourceId: string, targetId: string, x: number, y: number) => void;
+  onChange?: (placeholder: PlaceholderState) => void;
 }
 
-interface PlaceholderState {
+export interface PlaceholderState {
   // sourceIndex: number;
   sourceId: string;
   targetId: string;
@@ -167,6 +167,9 @@ export function DragContextProvider({ children, onChange }: Props) {
 
   function onSwitchTargets(placeholder: PlaceholderState) {
     console.log("switch targets", placeholder);
+    if (onChange) {
+      onChange(placeholder);
+    }
   }
 
   return (
