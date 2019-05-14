@@ -68,8 +68,8 @@ export function IconGrid({ id, items, style, ...other }: IconGridProps) {
   );
 
   React.useEffect(() => {
-    register(id, bounds);
-  }, [bounds, id]);
+    register(id, bounds, itemList.length);
+  }, [itemList, bounds, id]);
 
   React.useEffect(() => {
     return () => remove(id);
@@ -77,7 +77,7 @@ export function IconGrid({ id, items, style, ...other }: IconGridProps) {
 
   React.useEffect(() => {
     if (placeholderIndex != null) {
-      console.log("set springs placeholder");
+      console.log("set springs placeholder", id);
       setSprings(positions(order.current, placeholderIndex));
     }
   }, [placeholderIndex, order.current, setSprings]);
@@ -106,17 +106,6 @@ export function IconGrid({ id, items, style, ...other }: IconGridProps) {
          */
 
         function handleMove(state: StateType, down: boolean) {
-          // 1. get active droppable
-
-          // 2. get the target index for that droppable
-
-          // 3. if down,
-          // - update our drag position
-          // - insert item (or placeholder?) at index of target list
-
-          // 4. on release
-          // - remove item from previous list
-
           const curIndex = order.current.indexOf(i);
 
           const startPosition = getDragPosition(
@@ -150,10 +139,13 @@ export function IconGrid({ id, items, style, ...other }: IconGridProps) {
           // we need to tell render a placeholder element on the target
           // id. On drop, we remove this grid item, and add one to the other.
 
-          const targetIndex = clamp(
-            getTargetIndex(curIndex, state.delta[0], state.delta[1]),
-            items.length - 1
-          );
+          const targetIndex =
+            targetDropId !== id
+              ? items.length
+              : clamp(
+                  getTargetIndex(curIndex, state.delta[0], state.delta[1]),
+                  items.length - 1
+                );
 
           const newOrder = swap(
             order.current,
@@ -197,6 +189,7 @@ export function IconGrid({ id, items, style, ...other }: IconGridProps) {
 
         return (
           <Icon
+            disableDrag={!!placeholder}
             key={itemList[i].name}
             item={itemList[i]}
             styles={styles}
@@ -212,17 +205,33 @@ export function IconGrid({ id, items, style, ...other }: IconGridProps) {
 interface ItemProps {
   item: ItemType;
   styles: StyleProps;
+  disableDrag?: boolean;
   onMove: CallbackType;
   onEnd: (state: StateType) => void;
 }
 
-function Icon({ styles, item: { name, icon }, onMove, onEnd }: ItemProps) {
+function Icon({
+  disableDrag,
+  styles,
+  item: { name, icon },
+  onMove,
+  onEnd
+}: ItemProps) {
   const dragging = React.useRef(false);
 
   const { bind } = useGestureResponder(
     {
       onMoveShouldSet: () => {
+        // todo: Prevent if we have a placeholder, too. This means that our
+        // animation hasn't finished and our indexes will be messed up.
+        // we should also speed up animation so this is unlikely.
+
         // should only be true once long press triggers edit
+        if (disableDrag) {
+          return false;
+        }
+
+        console.log("set icon");
         dragging.current = true;
         return true;
       },
@@ -230,6 +239,7 @@ function Icon({ styles, item: { name, icon }, onMove, onEnd }: ItemProps) {
       onTerminationRequest: () => {
         // once we are dragging, prevent other responders
         // from taking over
+        console.log("request terminate", dragging.current);
         if (dragging.current) {
           return false;
         }
@@ -339,7 +349,6 @@ function positionsWithDrop(
 
 function finalPositions(order: number[]) {
   return (i: number) => {
-    console.log("RUNNING", i);
     return {
       ...getPositionForIndex(i, null),
       immediate: false,
@@ -431,5 +440,6 @@ function getTargetIndex(startIndex: number, dx: number, dy: number) {
 }
 
 export function getIndexFromCoordinates(x: number, y: number) {
+  // todo: we need to support a maxIndex property here
   return Math.floor(y / rh) * bpr + Math.floor(x / cw);
 }

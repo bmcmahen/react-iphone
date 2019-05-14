@@ -1,5 +1,5 @@
 .Dock {
-  padding: 0.25rem 0.75rem 0.75rem 0.75rem;
+  /* padding: 0.25rem 0.75rem 0.75rem 0.75rem; */
   display: grid;
   height: 95px;
 }

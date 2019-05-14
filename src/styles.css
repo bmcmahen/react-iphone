@@ -16,13 +16,19 @@
 
   /* overflow-y: visible !important;
   overflow-x: hidden !important; */
-  overflow: visible !important;
+  /* overflow: visible !important; */
 }
 
 .Gesture__apps .Gesture-view__pane {
-  overflow: visible !important;
+  /* overflow: visible !important; */
 }
 
 .Gesture-view__pane {
   outline: none;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
 }

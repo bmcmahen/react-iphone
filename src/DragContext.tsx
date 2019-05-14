@@ -3,7 +3,7 @@ import { Bounds } from "./hooks/use-measure";
 import { getIndexFromCoordinates, getPositionForIndex } from "./IconGrid";
 
 interface DragContextType {
-  register: (id: string, bounds: Bounds) => void;
+  register: (id: string, bounds: Bounds, length: number) => void;
   remove: (id: string) => void;
   placeholder: PlaceholderState | null;
   hidePlaceholder: () => void;
@@ -53,14 +53,28 @@ export interface PlaceholderState {
   targetIndex: number;
 }
 
+interface DroppableState extends Bounds {
+  length: number;
+}
+
 export function DragContextProvider({ children, onChange }: Props) {
   const [placeholder, setPlaceholder] = React.useState<PlaceholderState | null>(
     null
   );
-  const refs = React.useRef<Map<string, Bounds>>(new Map());
+  const refs = React.useRef<Map<string, DroppableState>>(new Map());
 
-  function register(id: string, bounds: any) {
-    refs.current.set(id, bounds);
+  function register(id: string, bounds: any, length: number) {
+    refs.current.set(id, {
+      bottom: bounds.bottom,
+      height: bounds.height,
+      left: bounds.left,
+      right: bounds.right,
+      top: bounds.top,
+      width: bounds.width,
+      length
+    });
+
+    console.log(refs.current);
   }
 
   // takes a fix position and returns a relative position in relation
@@ -109,7 +123,12 @@ export function DragContextProvider({ children, onChange }: Props) {
 
     const { x: fx, y: fy } = getFixedPosition(sourceId, x, y);
     const { x: rx, y: ry } = getRelativePosition(targetId, fx, fy);
-    const index = getIndexFromCoordinates(rx, ry);
+    let index = getIndexFromCoordinates(rx, ry);
+    const { length } = refs.current.get(targetId)!;
+
+    if (index >= length) {
+      index = length;
+    }
 
     const {
       xy: [px, py]
@@ -138,6 +157,8 @@ export function DragContextProvider({ children, onChange }: Props) {
     if (!bounds) {
       throw new Error("unable to find bounds");
     }
+
+    console.log("bounds", bounds);
 
     return {
       x: bounds.left + x,

@@ -82,6 +82,7 @@ export function IOS() {
   ) {
     if (suggested) {
       if (parentIndex === 0 || (state.delta[0] > 0 && childIndex === 0)) {
+        console.log("set parent");
         return true;
       }
     }
@@ -103,10 +104,16 @@ export function IOS() {
     targetId,
     targetIndex
   }: PlaceholderState) {
-    const [p, d] = move(pane, dock, sourceIndex, targetIndex);
-    console.log(p, d);
-    setDock(d);
-    setPane(p);
+    console.log(sourceId);
+    if (sourceId === "icons1") {
+      const [p, d] = move(pane, dock, sourceIndex, targetIndex);
+      setDock(d);
+      setPane(p);
+    } else {
+      const [d, p] = move(dock, pane, sourceIndex, targetIndex);
+      setDock(d);
+      setPane(p);
+    }
   }
 
   return (
@@ -137,7 +144,8 @@ export function IOS() {
             style={{
               flex: 1,
               display: "flex",
-              flexDirection: "column"
+              flexDirection: "column",
+              position: "relative"
             }}
           >
             <GestureView
@@ -153,7 +161,14 @@ export function IOS() {
               <Pane>2</Pane>
               <Pane>3</Pane>
             </GestureView>
-            <div>
+            <div
+              style={{
+                position: "absolute",
+                bottom: 0,
+                left: 0,
+                right: 0
+              }}
+            >
               <Dots count={3} activeIndex={childIndex} />
               <Dock items={dock} />
             </div>
