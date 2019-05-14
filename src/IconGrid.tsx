@@ -64,7 +64,7 @@ export function IconGrid({ id, items, style, ...other }: IconGridProps) {
 
   const [springs, setSprings] = useSprings(
     itemList.length,
-    positions(order.current, placeholderIndex)
+    finalPositions(order.current)
   );
 
   React.useEffect(() => {
@@ -76,8 +76,17 @@ export function IconGrid({ id, items, style, ...other }: IconGridProps) {
   }, [id]);
 
   React.useEffect(() => {
-    setSprings(positions(order.current, placeholderIndex));
+    if (placeholderIndex != null) {
+      console.log("set springs placeholder");
+      setSprings(positions(order.current, placeholderIndex));
+    }
   }, [placeholderIndex, order.current, setSprings]);
+
+  React.useEffect(() => {
+    order.current = itemList.map((_, i) => i);
+    console.log("set final springs");
+    // setSprings(finalPositions(order.current));
+  }, [order, itemList]);
 
   return (
     <div
@@ -321,6 +330,20 @@ function positionsWithDrop(
     return {
       ...getPositionForIndex(i >= placeholder.sourceIndex ? i - 1 : i, null),
       immediate: false,
+      zIndex: "0",
+      scale: 1,
+      opacity: 1
+    };
+  };
+}
+
+function finalPositions(order: number[]) {
+  return (i: number) => {
+    console.log("RUNNING", i);
+    return {
+      ...getPositionForIndex(i, null),
+      immediate: false,
+      reset: true,
       zIndex: "0",
       scale: 1,
       opacity: 1

@@ -167,6 +167,8 @@ export function DragContextProvider({ children, onChange }: Props) {
 
   function onSwitchTargets(placeholder: PlaceholderState) {
     console.log("switch targets", placeholder);
+    setPlaceholder(null);
+
     if (onChange) {
       onChange(placeholder);
     }
