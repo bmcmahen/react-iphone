@@ -13,6 +13,12 @@ import findIndex from "lodash-es/findIndex";
 import { useMeasure } from "./hooks/use-measure";
 import { DragContext } from "./DragContext";
 
+// BUG: switching icons in one row a few times
+// then swap it out to another dropzone.
+// OR we need a 'onChange' function after
+// item animates into place, so we can update the position
+// in the array. PROBABLY THIS.
+
 export interface ItemType {
   name: string;
   icon: any;
@@ -186,6 +192,10 @@ export function IconGrid({ id, items, style, ...other }: IconGridProps) {
         function onMove(state: StateType) {
           handleMove(state, true);
         }
+
+        // TODO: Disable drag if any icon is dragging
+        // basically maintain a "is dragging" state.
+        // or disable if we have a placeholder
 
         return (
           <Icon
@@ -376,14 +386,22 @@ function positions(
             immediate: true,
             zIndex: "2000",
             scale: 1.1,
-            opacity: 0.8
+            opacity: 0.8,
+            onRest: null
           }
         : {
             ...getPositionForIndex(order.indexOf(i), placeholderIndex),
             immediate: false,
             zIndex: "0",
             scale: 1,
-            opacity: 1
+            opacity: 1,
+            onRest:
+              !down && i === originalIndex
+                ? () => {
+                    console.log("on rest");
+                    console.log("update order of icons");
+                  }
+                : null
           };
 
     return pos;

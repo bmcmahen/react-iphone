@@ -98,12 +98,7 @@ export function IOS() {
     return true;
   }
 
-  function onSwap({
-    sourceId,
-    sourceIndex,
-    targetId,
-    targetIndex
-  }: PlaceholderState) {
+  function onSwap({ sourceId, sourceIndex, targetIndex }: PlaceholderState) {
     console.log(sourceId);
     if (sourceId === "icons1") {
       const [p, d] = move(pane, dock, sourceIndex, targetIndex);
@@ -156,7 +151,16 @@ export function IOS() {
               onRequestChange={i => setChildIndex(i)}
             >
               <Pane>
-                <IconGrid items={pane} id="icons1" />
+                <div
+                  style={{
+                    paddingTop: "2rem",
+                    paddingLeft: "0.75rem",
+                    paddingRight: "0.75rem",
+                    height: "100%"
+                  }}
+                >
+                  <IconGrid items={pane} id="icons1" />
+                </div>
               </Pane>
               <Pane>2</Pane>
               <Pane>3</Pane>
