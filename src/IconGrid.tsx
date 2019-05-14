@@ -72,6 +72,7 @@ export function IconGrid({
     register,
     remove,
     getCurrentDropId,
+    onSwitchTargets,
     hidePlaceholder,
     placeholder,
     showPlaceholder
@@ -207,7 +208,9 @@ export function IconGrid({
           handleMove(state, false);
 
           if (placeholder && placeholder.sourceId === id) {
-            setSprings(positionsWithDrop(order.current, placeholder));
+            setSprings(
+              positionsWithDrop(order.current, placeholder, onSwitchTargets)
+            );
           }
         }
 
@@ -320,7 +323,11 @@ interface PlaceholderState {
   ry: number;
 }
 
-function positionsWithDrop(order: number[], placeholder: PlaceholderState) {
+function positionsWithDrop(
+  order: number[],
+  placeholder: PlaceholderState,
+  onRemove: Function
+) {
   return (i: number) => {
     const isSourceIndex = placeholder && placeholder.sourceIndex === i;
 
@@ -338,13 +345,13 @@ function positionsWithDrop(order: number[], placeholder: PlaceholderState) {
         width: cw,
         height: rh,
         onRest: () => {
-          console.log("REMOVE and SWAP", i);
+          onRemove(placeholder);
         }
       };
     }
 
     return {
-      ...getPositionForIndex(i, null),
+      ...getPositionForIndex(i >= placeholder.sourceIndex ? i - 1 : i, null),
       immediate: false,
       zIndex: "0",
       scale: 1,

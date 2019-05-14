@@ -7,6 +7,11 @@
 /* make this semi-transparent eventually w/ blur */
 .Dock__content {
   border-radius: 2rem;
+  visibility: hidden;
   /* background: #7c6e65; */
   background: rgba(0, 0, 0, 0.1);
+}
+
+.Dock__content > * {
+  visibility: visible;
 }

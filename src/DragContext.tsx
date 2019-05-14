@@ -15,14 +15,7 @@ interface DragContextType {
     y: number,
     sourceIndex: number
   ) => void;
-  onSwitchTargets: (
-    sourceId: string,
-    targetId: string,
-    x: number,
-    y: number,
-    sourceIndex: number,
-    targetIndex: number
-  ) => void;
+  onSwitchTargets: (placeholder: PlaceholderState) => void;
 }
 
 export const DragContext = React.createContext<DragContextType>({
@@ -40,12 +33,7 @@ export const DragContext = React.createContext<DragContextType>({
     y: number,
     sourceIndex: number
   ) => {},
-  onSwitchTargets: (
-    sourceId: string,
-    targetId: string,
-    x: number,
-    y: number
-  ) => {}
+  onSwitchTargets: (placeholder: PlaceholderState) => {}
 });
 
 interface Props {
@@ -62,6 +50,7 @@ interface PlaceholderState {
   rx: number; // relative position of final target
   ry: number;
   sourceIndex: number;
+  targetIndex: number;
 }
 
 export function DragContextProvider({ children, onChange }: Props) {
@@ -139,7 +128,8 @@ export function DragContextProvider({ children, onChange }: Props) {
       x: rx,
       y: ry,
       ...relativePosition,
-      sourceIndex
+      sourceIndex,
+      targetIndex: index
     });
   }
 
@@ -175,12 +165,9 @@ export function DragContextProvider({ children, onChange }: Props) {
     return current;
   }
 
-  function onSwitchTargets(
-    sourceId: string,
-    targetId: string,
-    x: number,
-    y: number
-  ) {}
+  function onSwitchTargets(placeholder: PlaceholderState) {
+    console.log("switch targets", placeholder);
+  }
 
   return (
     <DragContext.Provider
