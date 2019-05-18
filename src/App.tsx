@@ -5,9 +5,14 @@ import { Pane } from "./Pane";
 import { Dots } from "./Dots";
 import "./styles.css";
 import { Dock } from "./Dock";
-import { IconGrid, ItemType } from "./IconGrid";
 import { Status } from "./Status";
-import { DragContextProvider, PlaceholderState } from "./DragContext";
+import {
+  GridContextProvider,
+  GridDropZone,
+  GridItem,
+  move,
+  swap
+} from "react-grid-dnd";
 import { Icon as IOSIcon } from "./Icons/Icon";
 import settings from "./Icons/Settings.svg";
 import messages from "./Icons/Messages.svg";
@@ -15,65 +20,53 @@ import reminders from "./Icons/Reminders.svg";
 import weather from "./Icons/Weather.svg";
 import wallet from "./Icons/Wallet.svg";
 
-const move = (
-  source: Array<ItemType>,
-  destination: Array<ItemType>,
-  droppableSource: number,
-  droppableDestination: number
-) => {
-  const sourceClone = Array.from(source);
-  const destClone = Array.from(destination);
-
-  console.log("s, d", sourceClone, destClone);
-
-  const [removed] = sourceClone.splice(droppableSource, 1);
-
-  destClone.splice(droppableDestination, 0, removed);
-
-  return [sourceClone, destClone];
-};
+interface AppState {
+  [key: string]: Array<{
+    name: string;
+    icon: React.ReactNode;
+  }>;
+}
 
 export function IOS() {
   const [childIndex, setChildIndex] = React.useState(0);
   const [parentIndex, setParentIndex] = React.useState(1);
 
-  const [dock, setDock] = React.useState([
-    {
-      name: "yaahhh",
-      icon: <IOSIcon iconOnly name="Settings" path={settings} />
-    },
-    {
-      name: "rdfsad",
-      icon: <IOSIcon iconOnly name="Messages" path={messages} />
-    },
-    {
-      name: "Kesadfasdfdasfasdfn",
-      icon: <IOSIcon iconOnly name="Reminders" path={reminders} />
-    }
-  ]);
-
-  const [pane, setPane] = React.useState([
-    {
-      name: "Ben",
-      icon: <IOSIcon name="Weather" path={weather} />
-    },
-    {
-      name: "Joe",
-      icon: <IOSIcon name="Wallet" path={wallet} />
-    },
-    {
-      name: "Ken",
-      icon: <IOSIcon name="Settings" path={settings} />
-    },
-    {
-      name: "Rod",
-      icon: <IOSIcon name="Messages" path={messages} />
-    },
-    {
-      name: "Bob",
-      icon: <IOSIcon name="Reminders" path={reminders} />
-    }
-  ]);
+  const [apps, setApps] = React.useState<AppState>({
+    dock: [
+      {
+        name: "Settings",
+        icon: <IOSIcon iconOnly name="Settings" path={settings} />
+      },
+      {
+        name: "Messages",
+        icon: <IOSIcon iconOnly name="Messages" path={messages} />
+      },
+      {
+        name: "Reminders",
+        icon: <IOSIcon iconOnly name="Reminders" path={reminders} />
+      }
+    ],
+    pane1: [
+      {
+        name: "Weather",
+        icon: <IOSIcon name="Weather" path={weather} />
+      },
+      {
+        name: "Wallet",
+        icon: <IOSIcon name="Wallet" path={wallet} />
+      }
+    ],
+    pane2: [
+      {
+        name: "Settings",
+        icon: <IOSIcon name="Settings" path={settings} />
+      },
+      {
+        name: "Messages",
+        icon: <IOSIcon iconOnly name="Messages" path={messages} />
+      }
+    ]
+  });
 
   function onMoveShouldSetParent(
     state: StateType,
@@ -98,17 +91,32 @@ export function IOS() {
     return true;
   }
 
-  function onSwap({ sourceId, sourceIndex, targetIndex }: PlaceholderState) {
-    console.log(sourceId);
-    if (sourceId === "icons1") {
-      const [p, d] = move(pane, dock, sourceIndex, targetIndex);
-      setDock(d);
-      setPane(p);
-    } else {
-      const [d, p] = move(dock, pane, sourceIndex, targetIndex);
-      setDock(d);
-      setPane(p);
+  function onSwap(
+    sourceId: string,
+    sourceIndex: number,
+    targetIndex: number,
+    targetId?: string
+  ) {
+    if (targetId) {
+      const result = move(
+        apps[sourceId],
+        apps[targetId],
+        sourceIndex,
+        targetIndex
+      );
+
+      return setApps({
+        ...apps,
+        [sourceId]: result[0],
+        [targetId]: result[1]
+      });
     }
+
+    const result = swap(apps[sourceId], sourceIndex, targetIndex);
+    return setApps({
+      ...apps,
+      [sourceId]: result
+    });
   }
 
   return (
@@ -124,7 +132,7 @@ export function IOS() {
       >
         <Status />
       </div>
-      <DragContextProvider onChange={onSwap}>
+      <GridContextProvider onChange={onSwap}>
         <GestureView
           className="Gesture__parent"
           enableMouse
@@ -150,20 +158,19 @@ export function IOS() {
               value={childIndex}
               onRequestChange={i => setChildIndex(i)}
             >
-              <Pane>
-                <div
-                  style={{
-                    paddingTop: "2rem",
-                    paddingLeft: "0.75rem",
-                    paddingRight: "0.75rem",
-                    height: "100%"
-                  }}
-                >
-                  <IconGrid items={pane} id="icons1" />
-                </div>
-              </Pane>
-              <Pane>2</Pane>
-              <Pane>3</Pane>
+              {Object.keys(apps)
+                .filter(key => key !== "dock")
+                .map(key => {
+                  return (
+                    <Pane key={key}>
+                      <GridDropZone boxesPerRow={4} rowHeight={70} id={key}>
+                        {apps[key].map(app => (
+                          <GridItem key={app.name}>{app.icon}</GridItem>
+                        ))}
+                      </GridDropZone>
+                    </Pane>
+                  );
+                })}
             </GestureView>
             <div
               style={{
@@ -174,11 +181,11 @@ export function IOS() {
               }}
             >
               <Dots count={3} activeIndex={childIndex} />
-              <Dock items={dock} />
+              <Dock items={apps.dock} />
             </div>
           </div>
         </GestureView>
-      </DragContextProvider>
+      </GridContextProvider>
     </div>
   );
 }

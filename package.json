@@ -14,7 +14,8 @@
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-gesture-responder": "^2.1.0",
-    "react-gesture-view": "^1.2.0",
+    "react-gesture-view": "^2.1.0",
+    "react-grid-dnd": "^2.0.1",
     "react-scripts": "3.0.1",
     "react-spring": "^9.0.0-beta.8",
     "typescript": "3.3"

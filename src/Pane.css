@@ -1,3 +1,7 @@
 .Pane {
   flex: 1;
 }
+
+.Pane > div {
+  height: calc(100% - 95px);
+}

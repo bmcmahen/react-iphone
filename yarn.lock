@@ -7934,15 +7934,27 @@ react-gesture-responder@^2.1.0:
     "@types/react-dom" "^16.8.3"
     tslib "^1.9.3"
 
-react-gesture-view@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/react-gesture-view/-/react-gesture-view-1.2.0.tgz#b5669911ddf6d65dd868a9b8553e51b77915b173"
-  integrity sha512-g90guOcwRSRg99eZTcjXHMjTyKpf/jTu6XawFDjT1QWOOOgrkbKX58pC0CyFDxY3TrSjOAHkDS9LOJ58ogmJJw==
+react-gesture-view@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/react-gesture-view/-/react-gesture-view-2.1.0.tgz#c0bf2b260f09682c5df9a0f9bb2ed70a0797554e"
+  integrity sha512-AIXOENGPjWu+DIYnbbat/Fdmj9/UuGWOB9PUGKPeoz7IRVA0wAipltZyqEw8hzsFtwVgs58s6k+wAaKwbrn+EQ==
   dependencies:
+    "@types/classnames" "^2.2.7"
     "@types/react" "^16.8.10"
     "@types/react-dom" "^16.8.3"
     react-remove-scroll "^1.0.8"
-    react-spring "^9.0.0-beta.5"
+    react-spring "^9.0.0-beta.8"
+    resize-observer-polyfill "^1.5.1"
+    tslib "^1.9.3"
+
+react-grid-dnd@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/react-grid-dnd/-/react-grid-dnd-2.0.1.tgz#04da048fd666279cd3cc3e3e53c9f962a033667f"
+  integrity sha512-u7riraYsDHTDLwc6AGznIjH/Q3RB7KjBW/+2uGjY2SUDTT7Ikql7vzM3CZ6Mzszh0dHoAcK9MH/3Y8Il68XODg==
+  dependencies:
+    "@types/react" "^16.8.10"
+    "@types/react-dom" "^16.8.3"
+    react-spring "^9.0.0-beta.8"
     resize-observer-polyfill "^1.5.1"
     tslib "^1.9.3"
 
@@ -8027,7 +8039,7 @@ react-scripts@3.0.1:
   optionalDependencies:
     fsevents "2.0.6"
 
-react-spring@^9.0.0-beta.5, react-spring@^9.0.0-beta.8:
+react-spring@^9.0.0-beta.8:
   version "9.0.0-beta.8"
   resolved "https://registry.yarnpkg.com/react-spring/-/react-spring-9.0.0-beta.8.tgz#dd4348d3d6dd88ff596b36fa85b3328200914b15"
   integrity sha512-pcyQqr5W9HBM5Rm0rmdbVIEQz7wocAfWBNWSUm/EEvpb4M0OQ3Xp9JW6Ayo+6ZgV7fLzJJHO/QgNdUMpAtVaTw==
