@@ -12,7 +12,12 @@ function formatAMPM() {
   return strTime;
 }
 
-export const Status = () => {
+interface Props {
+  isEditingApps: boolean;
+  endEditing: () => void;
+}
+
+export const Status = ({ isEditingApps, endEditing }: Props) => {
   const [time, setTime] = React.useState(formatAMPM());
   React.useEffect(() => {
     const timer = setInterval(() => {
@@ -23,6 +28,31 @@ export const Status = () => {
       clearTimeout(timer);
     };
   }, []);
+
+  if (isEditingApps) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "flex-end",
+          height: "14px"
+        }}
+      >
+        <button
+          style={{
+            background: "rgba(255,255,255,0.9)",
+            borderRadius: "3rem",
+            fontWeight: "bold",
+            height: "20px",
+            cursor: "pointer"
+          }}
+          onClick={endEditing}
+        >
+          Done
+        </button>
+      </div>
+    );
+  }
 
   return (
     <svg width="100%" height="14px" viewBox="0 0 326 14" version="1.1">

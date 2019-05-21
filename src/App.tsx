@@ -13,6 +13,7 @@ import {
   move,
   swap
 } from "react-grid-dnd";
+import cx from "classnames";
 import { Icon as IOSIcon } from "./Icons/Icon";
 import settings from "./Icons/Settings.svg";
 import messages from "./Icons/Messages.svg";
@@ -31,40 +32,98 @@ export function IOS() {
   const [childIndex, setChildIndex] = React.useState(0);
   const [parentIndex, setParentIndex] = React.useState(1);
   const [draggingApp, setDraggingApp] = React.useState(false);
+  const [isEditingApps, setIsEditingApps] = React.useState(false);
+
+  function editApps() {
+    setIsEditingApps(true);
+  }
 
   const [apps, setApps] = React.useState<AppState>({
     dock: [
       {
         name: "Settings",
-        icon: <IOSIcon iconOnly name="Settings" path={settings} />
+        icon: (
+          <IOSIcon
+            onLongPress={editApps}
+            isEditing={isEditingApps}
+            iconOnly
+            name="Settings"
+            path={settings}
+          />
+        )
       },
       {
         name: "Messages",
-        icon: <IOSIcon iconOnly name="Messages" path={messages} />
+        icon: (
+          <IOSIcon
+            onLongPress={editApps}
+            isEditing={isEditingApps}
+            iconOnly
+            name="Messages"
+            path={messages}
+          />
+        )
       },
       {
         name: "Reminders",
-        icon: <IOSIcon iconOnly name="Reminders" path={reminders} />
+        icon: (
+          <IOSIcon
+            onLongPress={editApps}
+            isEditing={isEditingApps}
+            iconOnly
+            name="Reminders"
+            path={reminders}
+          />
+        )
       }
     ],
     pane1: [
       {
         name: "Weather",
-        icon: <IOSIcon name="Weather" path={weather} />
+        icon: (
+          <IOSIcon
+            isEditing={isEditingApps}
+            onLongPress={editApps}
+            name="Weather"
+            path={weather}
+          />
+        )
       },
       {
         name: "Wallet",
-        icon: <IOSIcon name="Wallet" path={wallet} />
+        icon: (
+          <IOSIcon
+            isEditing={isEditingApps}
+            onLongPress={editApps}
+            name="Wallet"
+            path={wallet}
+          />
+        )
       }
     ],
     pane2: [
       {
         name: "Whatever",
-        icon: <IOSIcon name="Settings" path={settings} />
+        icon: (
+          <IOSIcon
+            isEditing={isEditingApps}
+            onLongPress={editApps}
+            name="Settings"
+            path={settings}
+          />
+        )
       },
       {
         name: "Idunno",
-        icon: <IOSIcon iconOnly name="Messages" path={messages} />
+        icon: (
+          <IOSIcon
+            onLongPress={editApps}
+            iconOnly
+            name="Messages"
+            isEditing={isEditingApps}
+            path={messages}
+          />
+        )
       }
     ]
   });
@@ -120,18 +179,28 @@ export function IOS() {
     });
   }
 
+  function endEditing() {
+    setIsEditingApps(false);
+  }
+
   return (
-    <div className="IOS" style={{ position: "relative" }}>
+    <div
+      className={cx("IOS", {
+        "IOS--editing": isEditingApps
+      })}
+      style={{ position: "relative" }}
+    >
       <div
         style={{
           position: "absolute",
           width: "100%",
           boxSizing: "border-box",
           top: 0,
-          padding: "1.35rem"
+          zIndex: 10,
+          padding: "1.35rem 1.75rem"
         }}
       >
-        <Status />
+        <Status isEditingApps={isEditingApps} endEditing={endEditing} />
       </div>
       <GridContextProvider onChange={onSwap}>
         <GestureView
@@ -170,7 +239,12 @@ export function IOS() {
                 .map(key => {
                   return (
                     <Pane key={key}>
-                      <GridDropZone boxesPerRow={4} rowHeight={105} id={key}>
+                      <GridDropZone
+                        disableDrag={!isEditingApps}
+                        boxesPerRow={4}
+                        rowHeight={105}
+                        id={key}
+                      >
                         {apps[key].map(app => (
                           <GridItem key={app.name}>
                             {React.cloneElement(app.icon as any, {
@@ -195,8 +269,15 @@ export function IOS() {
                 zIndex: draggingApp ? -1 : 0
               }}
             >
-              <Dots count={3} activeIndex={childIndex} />
-              <Dock draggingApp={draggingApp} items={apps.dock} />
+              <Dots
+                count={Object.keys(apps).length - 1}
+                activeIndex={childIndex}
+              />
+              <Dock
+                disableDrag={!isEditingApps}
+                draggingApp={draggingApp}
+                items={apps.dock}
+              />
             </div>
           </div>
         </GestureView>

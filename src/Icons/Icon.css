@@ -1,0 +1,38 @@
+@keyframes keyframes1 {
+  0% {
+    transform: rotate(-1.5deg);
+    animation-timing-function: ease-in;
+  }
+  50% {
+    transform: rotate(2deg);
+    animation-timing-function: ease-out;
+  }
+}
+
+@keyframes keyframes2 {
+  0% {
+    transform: rotate(1.5deg);
+    animation-timing-function: ease-in;
+  }
+  50% {
+    transform: rotate(-2deg);
+    animation-timing-function: ease-out;
+  }
+}
+
+.IOS--editing .Pane .GridItem:nth-child(2n):not(.dragging) > *,
+.IOS--editing .Dock .GridItem:nth-child(2n):not(.dragging) > * {
+  animation-name: keyframes1;
+  animation-iteration-count: infinite;
+  transform-origin: 50% 10%;
+  animation-duration: 0.3s;
+}
+
+.IOS--editing .Pane .GridItem:nth-child(2n-1):not(.dragging) > *,
+.IOS--editing .Dock .GridItem:nth-child(2n-1):not(.dragging) > * {
+  animation-name: keyframes2;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  transform-origin: 30% 5%;
+  animation-duration: 0.25s;
+}

@@ -1,15 +1,31 @@
 import * as React from "react";
+import { useTouchable } from "touchable-hook";
+import "./Icon.css";
 
 interface IconProps {
   path: string;
   name: string;
   iconOnly?: boolean;
+  isEditing: boolean;
+  onLongPress: () => void;
 }
 
-export function Icon({ path, name, iconOnly }: IconProps) {
+export function Icon({
+  isEditing,
+  path,
+  name,
+  iconOnly,
+  onLongPress
+}: IconProps) {
+  const { bind, active } = useTouchable({
+    onLongPress,
+    behavior: "button"
+  });
+
   return (
     <div
       style={{
+        animationName: active ? "none" : undefined,
         width: "100%",
         height: "100%",
         display: "flex",
@@ -19,6 +35,7 @@ export function Icon({ path, name, iconOnly }: IconProps) {
       }}
     >
       <div
+        {...bind}
         style={{
           width: "60px",
           height: "78px",
