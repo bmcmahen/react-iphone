@@ -7947,10 +7947,10 @@ react-gesture-view@^2.1.0:
     resize-observer-polyfill "^1.5.1"
     tslib "^1.9.3"
 
-react-grid-dnd@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/react-grid-dnd/-/react-grid-dnd-2.0.1.tgz#04da048fd666279cd3cc3e3e53c9f962a033667f"
-  integrity sha512-u7riraYsDHTDLwc6AGznIjH/Q3RB7KjBW/+2uGjY2SUDTT7Ikql7vzM3CZ6Mzszh0dHoAcK9MH/3Y8Il68XODg==
+react-grid-dnd@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/react-grid-dnd/-/react-grid-dnd-2.0.2.tgz#98a1be968ba4db4d39ad14d570e263358de47562"
+  integrity sha512-w4HW/1u6ueFeHuZRHo3dqwf/V0jKJ8d5vliAIbkTVpLw/nyHn8EgdXRt+sTtJdmxckp/QlW0zXye8BEcdxRrBA==
   dependencies:
     "@types/react" "^16.8.10"
     "@types/react-dom" "^16.8.3"

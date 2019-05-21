@@ -17,10 +17,14 @@ export function Dock(props: DockProps) {
           disableDrop={props.items.length === 4}
           id="dock"
           boxesPerRow={4}
-          rowHeight={70}
+          rowHeight={80}
         >
           {props.items.map(item => (
-            <GridItem key={item.name}>{item.icon}</GridItem>
+            <GridItem key={item.name}>
+              {React.cloneElement(item.icon as any, {
+                iconOnly: true
+              })}
+            </GridItem>
           ))}
         </GridDropZone>
       </div>

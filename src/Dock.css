@@ -1,5 +1,5 @@
 .Dock {
-  /* padding: 0.25rem 0.75rem 0.75rem 0.75rem; */
+  padding: 0.25rem 0.75rem 0.75rem 0.75rem;
   display: grid;
   height: 95px;
 }
@@ -7,9 +7,9 @@
 /* make this semi-transparent eventually w/ blur */
 .Dock__content {
   border-radius: 2rem;
-  visibility: hidden;
-  /* background: #7c6e65; */
-  background: rgba(0, 0, 0, 0.1);
+  /* visibility: hidden; */
+  background: #7c6e65;
+  /* background: rgba(0, 0, 0, 0.1); */
 }
 
 .Dock__content > * {

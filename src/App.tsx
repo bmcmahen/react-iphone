@@ -58,11 +58,11 @@ export function IOS() {
     ],
     pane2: [
       {
-        name: "Settings",
+        name: "Whatever",
         icon: <IOSIcon name="Settings" path={settings} />
       },
       {
-        name: "Messages",
+        name: "Idunno",
         icon: <IOSIcon iconOnly name="Messages" path={messages} />
       }
     ]
@@ -163,9 +163,13 @@ export function IOS() {
                 .map(key => {
                   return (
                     <Pane key={key}>
-                      <GridDropZone boxesPerRow={4} rowHeight={70} id={key}>
+                      <GridDropZone boxesPerRow={4} rowHeight={80} id={key}>
                         {apps[key].map(app => (
-                          <GridItem key={app.name}>{app.icon}</GridItem>
+                          <GridItem key={app.name}>
+                            {React.cloneElement(app.icon as any, {
+                              iconOnly: false
+                            })}
+                          </GridItem>
                         ))}
                       </GridDropZone>
                     </Pane>
