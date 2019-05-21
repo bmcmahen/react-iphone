@@ -34,5 +34,8 @@
 }
 
 .Gesture__apps .Pane {
+  padding: 0.25rem 0.75rem 0.75rem 0.75rem;
   padding-top: 50px;
+
+  display: grid;
 }

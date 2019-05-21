@@ -21,7 +21,7 @@ export function Icon({ path, name, iconOnly }: IconProps) {
       <div
         style={{
           width: "60px",
-          height: iconOnly ? "60px" : "78px",
+          height: "78px",
           margin: "0 auto",
           display: "flex",
           alignItems: "flex-end",
@@ -35,7 +35,8 @@ export function Icon({ path, name, iconOnly }: IconProps) {
             fontFamily: "helvetica",
             fontSize: "12px",
             color: "white",
-            visibility: iconOnly ? "hidden" : "visible"
+            transition: "opacity 0.3s ease",
+            opacity: iconOnly ? 0 : 1
           }}
         >
           {name}

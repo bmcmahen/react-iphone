@@ -30,6 +30,7 @@ interface AppState {
 export function IOS() {
   const [childIndex, setChildIndex] = React.useState(0);
   const [parentIndex, setParentIndex] = React.useState(1);
+  const [draggingApp, setDraggingApp] = React.useState(false);
 
   const [apps, setApps] = React.useState<AppState>({
     dock: [
@@ -144,6 +145,12 @@ export function IOS() {
         >
           <Pane>widget crap</Pane>
           <div
+            onMouseDown={() => {
+              setDraggingApp(true);
+            }}
+            onMouseUp={() => {
+              setDraggingApp(false);
+            }}
             style={{
               flex: 1,
               display: "flex",
@@ -163,7 +170,7 @@ export function IOS() {
                 .map(key => {
                   return (
                     <Pane key={key}>
-                      <GridDropZone boxesPerRow={4} rowHeight={80} id={key}>
+                      <GridDropZone boxesPerRow={4} rowHeight={105} id={key}>
                         {apps[key].map(app => (
                           <GridItem key={app.name}>
                             {React.cloneElement(app.icon as any, {
@@ -177,15 +184,19 @@ export function IOS() {
                 })}
             </GestureView>
             <div
+              onMouseDown={e => {
+                e.stopPropagation();
+              }}
               style={{
                 position: "absolute",
                 bottom: 0,
                 left: 0,
-                right: 0
+                right: 0,
+                zIndex: draggingApp ? -1 : 0
               }}
             >
               <Dots count={3} activeIndex={childIndex} />
-              <Dock items={apps.dock} />
+              <Dock draggingApp={draggingApp} items={apps.dock} />
             </div>
           </div>
         </GestureView>

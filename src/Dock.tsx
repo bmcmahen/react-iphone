@@ -3,6 +3,7 @@ import "./Dock.css";
 import { GridDropZone, GridItem } from "react-grid-dnd";
 
 interface DockProps {
+  draggingApp: boolean;
   items: Array<{
     name: string;
     icon: React.ReactNode;
@@ -14,10 +15,10 @@ export function Dock(props: DockProps) {
     <div className="Dock">
       <div className="Dock__content">
         <GridDropZone
-          disableDrop={props.items.length === 4}
+          disableDrop={props.draggingApp && props.items.length === 4}
           id="dock"
           boxesPerRow={4}
-          rowHeight={80}
+          rowHeight={105}
         >
           {props.items.map(item => (
             <GridItem key={item.name}>
