@@ -5,14 +5,51 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100vw;
-  height: 100vh;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+.Index {
+  display: block;
+
+  width: 100%;
+  flex-direction: row-reverse;
+  justify-content: space-evenly;
+}
+
+.Index .AboutTitle {
+  flex: 1 1 50%;
+  padding-right: 2rem;
+  line-height: 1.5;
+  color: #374047;
+  text-align: center;
+  padding: 4rem 0 1rem 0;
+}
+
+.Index .About {
+  text-align: center;
+}
+
+.Index .AboutTitle > * {
+  max-width: 40rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.Index__ios {
+  display: flex;
+  justify-content: center;
+  flex: 1 1 50%;
+}
+
+.Index .About {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.Index .AboutTitle .lead {
+  max-width: 34rem;
 }

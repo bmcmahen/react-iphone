@@ -27,6 +27,15 @@ export function useMeasure(ref: React.RefObject<HTMLDivElement | null>) {
       })
   );
 
+  function onResize() {
+    setBounds(ref.current!.getBoundingClientRect());
+  }
+
+  React.useEffect(() => {
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, [onResize]);
+
   React.useLayoutEffect(() => {
     if (ref.current) {
       observer.observe(ref.current);

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useGestureResponder, StateType } from "react-gesture-responder";
-import { useMeasure } from "react-grid-dnd/esm/use-measure";
+import { useMeasure } from "./hooks/use-measure";
 import { useSpring, animated } from "react-spring";
 import { linearConversion } from "./SearchPanel";
 import { clamp } from "lodash-es";
@@ -40,7 +40,7 @@ export function LockScreen({
     y: showLockOnMount ? 700 : 0
   }));
 
-  // battery panel toggle screen
+  // toggle screen spring
   const [{ top }, setPanel] = useSpring(() => ({
     top: 0
   }));
@@ -145,7 +145,9 @@ export function LockScreen({
       const [x, y] = xy;
 
       const rx = x - left;
-      const ry = y - top;
+      const ry = y - (top + window.scrollY);
+
+      console.log(x, left, rx);
 
       // moving down from top-left
       if (initialDirection[1] > 0 && ry < 30 && rx < 240) {
