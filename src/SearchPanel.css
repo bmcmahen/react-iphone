@@ -1,3 +1,30 @@
+.SearchPanel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.SearchPanel__container {
+  position: absolute;
+  top: 0;
+  z-index: 100;
+  height: 100%;
+  width: 100%;
+  padding: 0.5rem;
+  padding-top: 3rem;
+}
+
+.SearchPanel__body-content {
+  background-color: #827877bd;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  pointer-events: none;
+}
+
 .SearchInput {
   padding: 0;
   margin-bottom: 1rem;
@@ -40,6 +67,13 @@
   color: rgba(255, 255, 255, 0.8);
   font-size: small;
   padding: 0.35rem 1rem;
+}
+
+.BoxPane {
+  min-height: 100px;
+  margin-bottom: 0.5rem;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .BoxPane__suggestions {

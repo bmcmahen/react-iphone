@@ -21,9 +21,14 @@ interface Props {
 
 export const THRESHOLD = 150;
 
+/**
+ * Search panel which is invoked upon dragging down
+ */
+
 export function SearchPanel({ disable, children, y, set }: Props) {
   const [showing, setShowing] = React.useState(false);
 
+  // handle drag ends
   function onEnd(state: StateType) {
     const up = state.initialDirection[1] < 0;
     const y = up ? THRESHOLD + state.delta[1] : state.delta[1];
@@ -37,6 +42,7 @@ export function SearchPanel({ disable, children, y, set }: Props) {
     }
   }
 
+  // use our gesture responder
   const { bind } = useGestureResponder({
     onStartShouldSet: () => false,
     onRelease: onEnd,
@@ -69,31 +75,16 @@ export function SearchPanel({ disable, children, y, set }: Props) {
   });
 
   return (
-    <div
-      className="SearchPanel"
-      style={{
-        position: "relative",
-        width: "100%",
-        height: "100%"
-      }}
-      {...bind}
-    >
+    <div className="SearchPanel" {...bind}>
       <animated.div
+        className="SearchPanel__container"
         style={{
-          position: "absolute",
-          top: "0",
-
           pointerEvents: showing ? "auto" : "none",
           opacity: y.interpolate({
             range: [30, THRESHOLD],
             output: [0, 1],
             extrapolate: "clamp"
           }),
-          zIndex: 100,
-          height: "100%",
-          width: "100%",
-          padding: "0.5rem",
-          paddingTop: "3rem",
           transform: y.interpolate({
             range: [0, THRESHOLD],
             output: ["translateY(-10%)", "translateY(0%)"],
@@ -139,23 +130,18 @@ export function SearchPanel({ disable, children, y, set }: Props) {
           </div>
         </BoxPane>
       </animated.div>
+      {/* a semi transparent background over our body content when viewing */}
       <animated.div
+        className="SearchPanel__body-content"
         style={{
           opacity: y.interpolate({
             range: [0, THRESHOLD / 2],
             output: [0, 1],
             extrapolate: "clamp"
-          }),
-          backgroundColor: "#827877bd",
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          zIndex: 10,
-          pointerEvents: "none"
+          })
         }}
       />
+      {/* blur our body content when viewing */}
       <animated.div
         style={{
           filter: y.interpolate(y => `blur(${fn(clamp(y, 0, THRESHOLD))}px)`),
@@ -169,6 +155,10 @@ export function SearchPanel({ disable, children, y, set }: Props) {
 }
 
 const fn = linearConversion([0, THRESHOLD], [0, 15]);
+
+/**
+ * Perform a linear conversion using an input range, and output range
+ */
 
 export function linearConversion(a: any, b: any) {
   var o = a[1] - a[0],
@@ -186,19 +176,7 @@ function BoxPane({
   children?: React.ReactNode;
   className?: string;
 }) {
-  return (
-    <div
-      className={cx("BoxPane", className)}
-      style={{
-        minHeight: "100px",
-        marginBottom: "0.5rem",
-        borderRadius: "1rem",
-        background: "rgba(255,255,255,0.2)"
-      }}
-    >
-      {children}
-    </div>
-  );
+  return <div className={cx("BoxPane", className)}>{children}</div>;
 }
 
 export function SearchInput({ showing }: { showing: boolean }) {

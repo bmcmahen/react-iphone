@@ -1,33 +1,61 @@
-.App {
-  text-align: center;
+.IOS {
+  height: 700px;
+  border-radius: 2.5rem;
+  position: relative;
+  overflow: hidden;
+  width: 375px !important;
+}
+.IOS .Gesture__parent {
+  height: 100%;
+  background-image: url(https://images.unsplash.com/photo-1557474295-8fbaa04b4fee?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80);
+  background-size: cover;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none;
+.IOS .Gesture__apps {
+  flex: 1;
+  position: relative;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.IOS .Gesture-view__pane {
+  outline: none;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+  user-select: none;
+}
+
+.IOS .Gesture__apps .Pane {
+  padding: 0.25rem 0.75rem 0.75rem 0.75rem;
+  padding-top: 50px;
+  display: grid;
+}
+
+.IOS__status-container {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  z-index: 150;
+  padding: 1.35rem 1.75rem;
+}
+
+.IOS__app-icons-container {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  position: relative;
 }
 
-.App-link {
-  color: #61dafb;
+.IOS__app-icons-slide {
+  flex: 1;
+  display: flex;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.IOS__app-icons-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }

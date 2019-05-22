@@ -3,7 +3,7 @@ import * as React from "react";
 import { StateType, ResponderEvent } from "react-gesture-responder";
 import { Pane } from "./Pane";
 import { Dots } from "./Dots";
-import "./styles.css";
+import "./App.css";
 import { Dock } from "./Dock";
 import { Status } from "./Status";
 import {
@@ -46,15 +46,24 @@ interface AppState {
 }
 
 export function IOS() {
+  // controls the app icon panels
   const [childIndex, setChildIndex] = React.useState(0);
+
+  // controls the side menu panel
   const [parentIndex, setParentIndex] = React.useState(1);
+
+  // used to get us the right zIndex when dragging app icons to the dock
   const [draggingApp, setDraggingApp] = React.useState(false);
+
+  // when a user has held an icon for an extended duration
   const [isEditingApps, setIsEditingApps] = React.useState(false);
 
   function editApps() {
     setIsEditingApps(true);
   }
 
+  // our initial app icon state. we could eventually save
+  // this to localstorage or something
   const [apps, setApps] = React.useState<AppState>({
     dock: [
       {
@@ -260,9 +269,9 @@ export function IOS() {
     _e: ResponderEvent,
     suggested: boolean
   ) {
+    // set our parent when swiping left on the first app pane
     if (suggested) {
       if (parentIndex === 0 || (state.delta[0] > 0 && childIndex === 0)) {
-        console.log("set parent");
         return true;
       }
     }
@@ -278,6 +287,7 @@ export function IOS() {
     return true;
   }
 
+  // swap app icons from pane to dock
   function onSwap(
     sourceId: string,
     sourceIndex: number,
@@ -306,7 +316,7 @@ export function IOS() {
     });
   }
 
-  // search spring
+  // search spring (triggered when swiping down in app panel)
   const [{ y }, set] = useSpring(() => ({
     y: 0
   }));
@@ -320,21 +330,13 @@ export function IOS() {
       className={cx("IOS", {
         "IOS--editing": isEditingApps
       })}
-      style={{ position: "relative" }}
     >
-      <LockScreen>
-        <div
-          style={{
-            position: "absolute",
-            width: "100%",
-            boxSizing: "border-box",
-            top: 0,
-            zIndex: 150,
-            padding: "1.35rem 1.75rem"
-          }}
-        >
+      <LockScreen showLockOnMount>
+        {/* Status bar * */}
+        <div className="IOS__status-container">
           <Status isEditingApps={isEditingApps} endEditing={endEditing} />
         </div>
+        {/* Search panel triggered when dragging down */}
         <SearchPanel disable={parentIndex === 0} y={y} set={set}>
           <GridContextProvider onChange={onSwap}>
             <GestureView
@@ -346,10 +348,12 @@ export function IOS() {
               onMoveShouldSet={onMoveShouldSetParent}
               onTerminationRequest={onTerminationRequestParent}
             >
+              {/* Left search pane */}
               <Pane>
                 <LeftPane />
               </Pane>
 
+              {/* App icons gesture views */}
               <div
                 onMouseDown={() => {
                   setDraggingApp(true);
@@ -357,17 +361,12 @@ export function IOS() {
                 onMouseUp={() => {
                   setDraggingApp(false);
                 }}
-                style={{
-                  flex: 1,
-                  display: "flex",
-                  flexDirection: "column",
-                  position: "relative"
-                }}
+                className="IOS__app-icons-container"
               >
+                {/* Slides down when invoking search panel */}
                 <animated.div
+                  className="IOS__app-icons-slide"
                   style={{
-                    flex: 1,
-                    display: "flex",
                     transform: y.interpolate({
                       range: [0, THRESHOLD],
                       output: ["translateY(0%)", "translateY(7%)"],
@@ -375,6 +374,7 @@ export function IOS() {
                     })
                   }}
                 >
+                  {/* Render a gesture view / dropzone for each pane of icons */}
                   <GestureView
                     className="Gesture__apps"
                     id="child"
@@ -407,14 +407,11 @@ export function IOS() {
                   </GestureView>
                 </animated.div>
                 <div
+                  className="IOS__app-icons-bottom"
                   onMouseDown={e => {
                     e.stopPropagation();
                   }}
                   style={{
-                    position: "absolute",
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
                     zIndex: draggingApp ? -1 : 0
                   }}
                 >

@@ -14,28 +14,42 @@ const PANEL_THRESHOLD = 150;
 
 interface LockScreenProps {
   children: React.ReactNode;
+  showLockOnMount?: boolean;
 }
 
-export function LockScreen({ children }: LockScreenProps) {
+/**
+ * The lock screen + toggle screen which are invoked
+ * by dragging down
+ * @param param0
+ */
+
+export function LockScreen({
+  children,
+  showLockOnMount = false
+}: LockScreenProps) {
   const ref = React.useRef(null);
   const rightSheet = React.useRef(false);
-  const [showing, setShowing] = React.useState(false);
+  const [showing, setShowing] = React.useState(showLockOnMount);
   const [showingPanel, setShowingPanel] = React.useState(false);
   const [renderPanelItems, setRenderPanelItems] = React.useState(false);
 
   const { bounds } = useMeasure(ref);
 
+  // lock screen spring
   const [{ y }, setLock] = useSpring(() => ({
-    y: 0
+    y: showLockOnMount ? 700 : 0
   }));
 
+  // battery panel toggle screen
   const [{ top }, setPanel] = useSpring(() => ({
     top: 0
   }));
 
+  // handle drag end
   function onEnd(state: StateType) {
     const [, y] = state.delta;
 
+    // handle drag end for toggle screen
     if (rightSheet.current || showingPanel) {
       const ry = showingPanel
         ? PANEL_THRESHOLD + state.delta[1]
@@ -58,6 +72,7 @@ export function LockScreen({ children }: LockScreenProps) {
       return;
     }
 
+    // handle drag end for lock screen
     const ry = showing ? 700 + y : y;
 
     function open() {
@@ -79,6 +94,7 @@ export function LockScreen({ children }: LockScreenProps) {
     return ry > LOCK_THRESHOLD ? open() : close();
   }
 
+  // bind our gesture reponder
   const { bind } = useGestureResponder({
     onStartShouldSet: () => false,
     onRelease: onEnd,
@@ -115,7 +131,8 @@ export function LockScreen({ children }: LockScreenProps) {
         immediate: true
       });
     },
-    onMoveShouldSet: ({ xy, local, initialDirection }) => {
+    onMoveShouldSet: ({ xy, initialDirection }) => {
+      // handle cases where panels are already showing
       if (showing || showingPanel) {
         if (initialDirection[1] < 0) {
           return true;
@@ -146,6 +163,7 @@ export function LockScreen({ children }: LockScreenProps) {
     }
   });
 
+  // update our time for the lock screen
   const [time, setTime] = React.useState(formatAMPM());
 
   React.useEffect(() => {
@@ -159,24 +177,11 @@ export function LockScreen({ children }: LockScreenProps) {
   }, []);
 
   return (
-    <div
-      ref={ref}
-      {...bind}
-      style={{
-        position: "relative",
-        height: "100%",
-        width: "100%"
-      }}
-    >
+    <div ref={ref} className="LockScreen" {...bind}>
       <animated.div
+        className="LockScreen__toggle-container"
         aria-hidden={!showingPanel}
         style={{
-          position: "absolute",
-          top: 0,
-          height: "100%",
-          zIndex: 250,
-          left: 0,
-          width: "100%",
           pointerEvents: showingPanel ? "auto" : "none",
           transform: top.interpolate({
             range: [0, PANEL_THRESHOLD],
@@ -189,44 +194,24 @@ export function LockScreen({ children }: LockScreenProps) {
         <PanelContents showing={renderPanelItems} />
       </animated.div>
       <animated.div
+        className="LockScreen__blur-bg"
         style={{
-          position: "relative",
-          height: "100%",
-          width: "100%",
           filter: top.interpolate(top => {
             return `blur(${blurFn(clamp(top, 0, PANEL_THRESHOLD))}px)`;
           })
         }}
       >
         <animated.div
+          aria-hidden={!showing}
+          className="LockScreen__content"
           style={{
-            position: "absolute",
-            bottom: "100%",
-            height: "100%",
-            width: "100%",
-            display: "flex",
-            flexDirection: "column",
-            zIndex: 200,
             transform: y.interpolate(y => `translateY(${clamp(y, 0, 700)}px)`)
           }}
         >
-          <div
-            style={{
-              overflow: "hidden",
-              background: "rgba(0,0,0,0.1)",
-              height: "100%",
-              flex: 1,
-              display: "flex",
-              flexDirection: "column",
-              position: "relative"
-            }}
-          >
+          <div>
             <animated.div
+              className="LockScreen__blur-img"
               style={{
-                position: "absolute",
-                top: "-10px",
-                left: "-10px",
-                width: "calc(100% + 20px)",
                 transform: y.interpolate({
                   range: [0, 700],
                   output: ["translateY(300px)", "translateY(0px)"],
@@ -235,29 +220,13 @@ export function LockScreen({ children }: LockScreenProps) {
                 filter: y.interpolate(
                   y => `blur(${convert(clamp(y, 600, 700))}px)`
                 ),
-
-                height: "calc(100% + 20px)",
-                backgroundImage: `url(https://images.unsplash.com/photo-1558424774-86401550d687?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80)`,
-                backgroundSize: "cover"
+                backgroundImage: `url(https://images.unsplash.com/photo-1558424774-86401550d687?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80)`
               }}
             />
-            <div
-              style={{
-                padding: "1.35rem 1.75rem",
-                position: "relative"
-              }}
-            >
-              <Status isEditingApps={false} endEditing={() => {}} />
+            <div className="LockScreen__status-container">
+              <Status />
             </div>
-            <div
-              style={{
-                position: "relative",
-                display: "flex",
-                flex: 1,
-                alignItems: "center",
-                flexDirection: "column"
-              }}
-            >
+            <div className="LockScreen__date-time">
               <div className="LockScreen__time">{time.slice(0, -2)}</div>
               <div className="LockScreen__date">
                 {format(new Date(), "dddd, MMM D")}
