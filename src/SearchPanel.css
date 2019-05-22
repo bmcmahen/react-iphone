@@ -1,0 +1,75 @@
+.SearchInput {
+  padding: 0;
+  margin-bottom: 1rem;
+  margin-top: 0.5rem;
+  position: relative;
+}
+
+.SearchInput input {
+  border: none;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 0.5rem;
+  height: 38px;
+  font-size: 16px;
+  transition: background 0.25s ease;
+  color: white;
+  padding: 0 1rem;
+  padding-left: 2rem;
+}
+
+.SearchInput svg {
+  position: absolute;
+  left: 0.4rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.SearchInput input:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.SearchInput input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.UppercaseLabel {
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: small;
+  padding: 0.35rem 1rem;
+}
+
+.BoxPane__suggestions {
+  display: flex;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.BoxPane__shortcuts {
+  display: block;
+}
+
+.BoxPane__shortcuts > div {
+  padding-bottom: 0.5rem;
+}
+
+.BoxPane__shortcuts > div:after {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  margin: 0 1rem;
+  content: "";
+  position: absolute;
+  left: 0.5rem;
+  right: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.BoxPane__shortcuts > div > div {
+  display: flex;
+  padding-top: 1rem;
+  margin-bottom: -1rem;
+  width: 90px;
+  justify-content: flex-start;
+}

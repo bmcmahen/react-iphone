@@ -20,7 +20,8 @@ import messages from "./Icons/Messages.svg";
 import reminders from "./Icons/Reminders.svg";
 import weather from "./Icons/Weather.svg";
 import wallet from "./Icons/Wallet.svg";
-import { SearchPanel } from "./SearchPanel";
+import { SearchPanel, THRESHOLD } from "./SearchPanel";
+import { useSpring, animated } from "react-spring";
 
 interface AppState {
   [key: string]: Array<{
@@ -180,6 +181,11 @@ export function IOS() {
     });
   }
 
+  // search spring
+  const [{ y }, set] = useSpring(() => ({
+    y: 0
+  }));
+
   function endEditing() {
     setIsEditingApps(false);
   }
@@ -203,7 +209,7 @@ export function IOS() {
       >
         <Status isEditingApps={isEditingApps} endEditing={endEditing} />
       </div>
-      <SearchPanel>
+      <SearchPanel y={y} set={set}>
         <GridContextProvider onChange={onSwap}>
           <GestureView
             className="Gesture__parent"
@@ -230,36 +236,48 @@ export function IOS() {
                 position: "relative"
               }}
             >
-              <GestureView
-                className="Gesture__apps"
-                id="child"
-                enableMouse
-                value={childIndex}
-                onRequestChange={i => setChildIndex(i)}
+              <animated.div
+                style={{
+                  flex: 1,
+                  display: "flex",
+                  transform: y.interpolate({
+                    range: [0, THRESHOLD],
+                    output: ["translateY(0%)", "translateY(7%)"],
+                    extrapolate: "clamp"
+                  })
+                }}
               >
-                {Object.keys(apps)
-                  .filter(key => key !== "dock")
-                  .map(key => {
-                    return (
-                      <Pane key={key}>
-                        <GridDropZone
-                          disableDrag={!isEditingApps}
-                          boxesPerRow={4}
-                          rowHeight={105}
-                          id={key}
-                        >
-                          {apps[key].map(app => (
-                            <GridItem key={app.name}>
-                              {React.cloneElement(app.icon as any, {
-                                iconOnly: false
-                              })}
-                            </GridItem>
-                          ))}
-                        </GridDropZone>
-                      </Pane>
-                    );
-                  })}
-              </GestureView>
+                <GestureView
+                  className="Gesture__apps"
+                  id="child"
+                  enableMouse
+                  value={childIndex}
+                  onRequestChange={i => setChildIndex(i)}
+                >
+                  {Object.keys(apps)
+                    .filter(key => key !== "dock")
+                    .map(key => {
+                      return (
+                        <Pane key={key}>
+                          <GridDropZone
+                            disableDrag={!isEditingApps}
+                            boxesPerRow={4}
+                            rowHeight={105}
+                            id={key}
+                          >
+                            {apps[key].map(app => (
+                              <GridItem key={app.name}>
+                                {React.cloneElement(app.icon as any, {
+                                  iconOnly: false
+                                })}
+                              </GridItem>
+                            ))}
+                          </GridDropZone>
+                        </Pane>
+                      );
+                    })}
+                </GestureView>
+              </animated.div>
               <div
                 onMouseDown={e => {
                   e.stopPropagation();

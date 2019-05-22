@@ -6,8 +6,8 @@ interface IconProps {
   path: string;
   name: string;
   iconOnly?: boolean;
-  isEditing: boolean;
-  onLongPress: () => void;
+  isEditing?: boolean;
+  onLongPress?: () => void;
 }
 
 export function Icon({
