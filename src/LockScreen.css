@@ -1,0 +1,41 @@
+.LockScreen__time {
+  color: white;
+  font-size: 5rem;
+  font-weight: 200;
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.LockScreen__date {
+  color: white;
+  flex: 1;
+  font-size: 17px;
+}
+
+.LockScreen__swipe-bar {
+  background: white;
+  width: 125px;
+  height: 4px;
+  border-radius: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.LockScreen__button-container {
+  padding: 2.5rem;
+  display: flex;
+  align-self: stretch;
+  justify-content: space-between;
+}
+
+.LockScreen__buttons {
+  height: 50px;
+  width: 50px;
+  color: white;
+  background: #565552;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+}

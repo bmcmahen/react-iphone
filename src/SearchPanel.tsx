@@ -1,11 +1,10 @@
 import * as React from "react";
 import { useGestureResponder, StateType } from "react-gesture-responder";
-import { useSpring, animated, SpringValue, SpringUpdateFn } from "react-spring";
+import { animated, SpringValue, SpringUpdateFn } from "react-spring";
 import { clamp } from "lodash-es";
 import "./SearchPanel.css";
 import cx from "classnames";
 import { Icon as IOSIcon } from "./Icons/Icon";
-import settings from "./Icons/Settings.svg";
 import messages from "./Icons/Messages.svg";
 import reminders from "./Icons/Reminders.svg";
 import weather from "./Icons/Weather.svg";
@@ -14,6 +13,7 @@ import wallet from "./Icons/Wallet.svg";
 interface Props {
   children: React.ReactNode;
   y: SpringValue<number>;
+  disable?: boolean;
   set: SpringUpdateFn<{
     y: number;
   }>;
@@ -21,7 +21,7 @@ interface Props {
 
 export const THRESHOLD = 150;
 
-export function SearchPanel({ children, y, set }: Props) {
+export function SearchPanel({ disable, children, y, set }: Props) {
   const [showing, setShowing] = React.useState(false);
 
   function onEnd(state: StateType) {
@@ -49,6 +49,9 @@ export function SearchPanel({ children, y, set }: Props) {
       });
     },
     onMoveShouldSet: state => {
+      if (disable) {
+        return false;
+      }
       if (state.initialDirection[1] > 0 && showing) {
         return false;
       }
@@ -111,15 +114,27 @@ export function SearchPanel({ children, y, set }: Props) {
             <div>
               <IOSIcon iconOnly name="Messages" path={messages} />
             </div>
+            <div>
+              <div>Send a message</div>
+              <div>Messages</div>
+            </div>
           </div>
           <div>
             <div>
               <IOSIcon iconOnly name="Weather" path={weather} />
             </div>
+            <div>
+              <div>Check the weather</div>
+              <div>Weather</div>
+            </div>
           </div>
           <div>
             <div>
               <IOSIcon iconOnly name="Reminders" path={reminders} />
+            </div>
+            <div>
+              <div>Add a reminder</div>
+              <div>Reminders</div>
             </div>
           </div>
         </BoxPane>
@@ -155,7 +170,7 @@ export function SearchPanel({ children, y, set }: Props) {
 
 const fn = linearConversion([0, THRESHOLD], [0, 15]);
 
-function linearConversion(a: any, b: any) {
+export function linearConversion(a: any, b: any) {
   var o = a[1] - a[0],
     n = b[1] - b[0];
 
@@ -186,7 +201,7 @@ function BoxPane({
   );
 }
 
-function SearchInput({ showing }: { showing: boolean }) {
+export function SearchInput({ showing }: { showing: boolean }) {
   const input = React.useRef<HTMLInputElement>(null);
 
   React.useEffect(() => {
@@ -203,7 +218,7 @@ function SearchInput({ showing }: { showing: boolean }) {
   );
 }
 
-function UppercaseLabel({ children }: { children: React.ReactNode }) {
+export function UppercaseLabel({ children }: { children: React.ReactNode }) {
   return <div className="UppercaseLabel">{children}</div>;
 }
 

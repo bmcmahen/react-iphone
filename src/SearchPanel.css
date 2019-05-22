@@ -54,6 +54,9 @@
 
 .BoxPane__shortcuts > div {
   padding-bottom: 0.5rem;
+  display: flex;
+  position: relative;
+  align-items: center;
 }
 
 .BoxPane__shortcuts > div:after {
@@ -64,12 +67,26 @@
   left: 0.5rem;
   right: 0.5rem;
   padding-bottom: 0.5rem;
+  bottom: 0;
 }
 
-.BoxPane__shortcuts > div > div {
+.BoxPane__shortcuts > div > div:first-child {
   display: flex;
   padding-top: 1rem;
   margin-bottom: -1rem;
   width: 90px;
   justify-content: flex-start;
+}
+.BoxPane__shortcuts > div > div:last-child {
+  margin-top: 0.5rem;
+}
+.BoxPane__shortcuts > div > div:last-child > div:first-child {
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+}
+.BoxPane__shortcuts > div > div:last-child > div:last-child {
+  font-size: small;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 0.25rem;
 }

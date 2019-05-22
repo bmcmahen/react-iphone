@@ -2,7 +2,7 @@ import * as React from "react";
 import "./Status.css";
 import { useTransition, animated } from "react-spring";
 
-function formatAMPM() {
+export function formatAMPM() {
   const date = new Date();
   var hours = date.getHours();
   var minutes = date.getMinutes();

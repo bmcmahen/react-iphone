@@ -1,0 +1,48 @@
+.LeftPane {
+  padding: 0.25rem 1rem;
+  margin-top: 50px;
+}
+
+.LeftPane__Box {
+  background: #dedede;
+  backdrop-filter: blur(10px);
+  border-radius: 1rem;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.LeftPane__Box__title {
+  background: #ede7e7;
+  height: 40px;
+  display: flex;
+  align-items: center;
+}
+
+.LeftPane__Box .UppercaseLabel {
+  color: #828385;
+}
+
+.LeftPane__Box:nth-child(2) .LeftPane__Box__content {
+  padding: 2rem;
+  font-size: 18px;
+  color: #949494;
+  text-align: center;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.LeftPane__Box:nth-child(3) .LeftPane__Box__content {
+  display: flex;
+  padding: 1rem 0;
+}
+
+.LeftPane__Box:nth-child(3) .LeftPane__Box__content span {
+  color: #949494 !important;
+}
+
+@supports (backdrop-filter: blur(10px)) {
+  .LeftPane__Box {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+  }
+}
