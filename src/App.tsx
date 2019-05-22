@@ -20,6 +20,19 @@ import messages from "./Icons/Messages.svg";
 import reminders from "./Icons/Reminders.svg";
 import weather from "./Icons/Weather.svg";
 import wallet from "./Icons/Wallet.svg";
+import safari from "./Icons/Safari.svg";
+import phone from "./Icons/Phone.svg";
+import notes from "./Icons/Notes.svg";
+import news from "./Icons/News.svg";
+import calc from "./Icons/Calculator.svg";
+import camera from "./Icons/Camera.svg";
+import stocks from "./Icons/Stocks.svg";
+import photos from "./Icons/Photos.svg";
+import facetime from "./Icons/FaceTime.svg";
+import home from "./Icons/Home.svg";
+import tv from "./Icons/TV.svg";
+import books from "./Icons/iBooks.svg";
+
 import { SearchPanel, THRESHOLD } from "./SearchPanel";
 import { useSpring, animated } from "react-spring";
 
@@ -101,29 +114,139 @@ export function IOS() {
             path={wallet}
           />
         )
-      }
-    ],
-    pane2: [
+      },
       {
-        name: "Whatever",
+        name: "Phone",
         icon: (
           <IOSIcon
             isEditing={isEditingApps}
             onLongPress={editApps}
-            name="Settings"
-            path={settings}
+            name="Phone"
+            path={phone}
           />
         )
       },
       {
-        name: "Idunno",
+        name: "Safari",
+        icon: (
+          <IOSIcon
+            isEditing={isEditingApps}
+            onLongPress={editApps}
+            name="Safari"
+            path={safari}
+          />
+        )
+      },
+      {
+        name: "Notes",
+        icon: (
+          <IOSIcon
+            isEditing={isEditingApps}
+            onLongPress={editApps}
+            name="Notes"
+            path={notes}
+          />
+        )
+      },
+      {
+        name: "News",
+        icon: (
+          <IOSIcon
+            isEditing={isEditingApps}
+            onLongPress={editApps}
+            name="News"
+            path={news}
+          />
+        )
+      },
+      {
+        name: "Calculator",
+        icon: (
+          <IOSIcon
+            isEditing={isEditingApps}
+            onLongPress={editApps}
+            name="Calculator"
+            path={calc}
+          />
+        )
+      },
+      {
+        name: "Camera",
+        icon: (
+          <IOSIcon
+            isEditing={isEditingApps}
+            onLongPress={editApps}
+            name="Camera"
+            path={camera}
+          />
+        )
+      },
+      {
+        name: "Stocks",
+        icon: (
+          <IOSIcon
+            isEditing={isEditingApps}
+            onLongPress={editApps}
+            name="Stocks"
+            path={stocks}
+          />
+        )
+      },
+      {
+        name: "Photos",
+        icon: (
+          <IOSIcon
+            isEditing={isEditingApps}
+            onLongPress={editApps}
+            name="Photos"
+            path={photos}
+          />
+        )
+      },
+      {
+        name: "FaceTime",
+        icon: (
+          <IOSIcon
+            isEditing={isEditingApps}
+            onLongPress={editApps}
+            name="FaceTime"
+            path={facetime}
+          />
+        )
+      }
+    ],
+    pane2: [
+      {
+        name: "Home",
+        icon: (
+          <IOSIcon
+            isEditing={isEditingApps}
+            onLongPress={editApps}
+            name="Home"
+            path={home}
+          />
+        )
+      },
+      {
+        name: "TV",
         icon: (
           <IOSIcon
             onLongPress={editApps}
             iconOnly
-            name="Messages"
+            name="TV"
             isEditing={isEditingApps}
-            path={messages}
+            path={tv}
+          />
+        )
+      },
+      {
+        name: "iBooks",
+        icon: (
+          <IOSIcon
+            isEditing={isEditingApps}
+            onLongPress={editApps}
+            name="iBooks"
+            path={books}
           />
         )
       }

@@ -7,9 +7,7 @@
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="Home" transform="translate(-289.000000, -380.000000)">
             <g id="Calculator" transform="translate(289.000000, 380.000000)">
-                <text id="Messages-" font-family="Helvetica" font-size="12" font-weight="normal" fill="#FFFFFF">
-                    <tspan x="2" y="76">Calculator</tspan>
-                </text>
+              
                 <g id="Calculator-icon">
                     <path d="M60.3068182,46.9977273 C60.3068182,54.3177273 54.3177273,60.3068182 46.9977273,60.3068182 L13.3090909,60.3068182 C5.98909091,60.3068182 0,54.3177273 0,46.9977273 L0,13.3090909 C0,5.98909091 5.98909091,0 13.3090909,0 L46.9977273,0 C54.3177273,0 60.3068182,5.98909091 60.3068182,13.3090909 L60.3068182,46.9977273 Z" id="Fill-1" fill="#FFFFFF"></path>
                     <g transform="translate(14.000000, 7.000000)">

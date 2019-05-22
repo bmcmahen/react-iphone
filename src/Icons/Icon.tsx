@@ -39,10 +39,11 @@ export function Icon({
         style={{
           filter: active ? "brightness(0.8)" : "none",
           width: "60px",
-          height: "78px",
+          height: "80px",
           margin: "0 auto",
           display: "flex",
           alignItems: "flex-end",
+          cursor: "pointer",
           justifyContent: "center",
           backgroundRepeat: "no-repeat",
           backgroundImage: `url(${path})`
@@ -50,8 +51,10 @@ export function Icon({
       >
         <span
           style={{
-            fontFamily: "helvetica",
             fontSize: "12px",
+            paddingTop: "0.15rem",
+            fontWeight: 500,
+            display: "block",
             color: "white",
             transition: "opacity 0.3s ease",
             opacity: iconOnly ? 0 : 1

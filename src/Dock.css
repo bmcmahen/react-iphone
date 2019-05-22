@@ -1,7 +1,7 @@
 .Dock {
   padding: 0.25rem 0.75rem 0.75rem 0.75rem;
   display: grid;
-  height: 105px;
+  height: 100px;
 }
 
 /* make this semi-transparent eventually w/ blur */

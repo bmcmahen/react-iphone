@@ -98,7 +98,7 @@ export function SearchPanel({ children, y, set }: Props) {
           })
         }}
       >
-        <SearchInput />
+        <SearchInput showing={showing} />
         <UppercaseLabel>Siri Suggestions</UppercaseLabel>
         <BoxPane className="BoxPane__suggestions">
           <IOSIcon name="Messages" path={messages} />
@@ -186,11 +186,19 @@ function BoxPane({
   );
 }
 
-function SearchInput() {
+function SearchInput({ showing }: { showing: boolean }) {
+  const input = React.useRef<HTMLInputElement>(null);
+
+  React.useEffect(() => {
+    if (showing) {
+      input.current!.focus();
+    }
+  }, [showing]);
+
   return (
     <form className="SearchInput">
       <SearchIcon />
-      <input autoFocus type="search" placeholder="Search" />
+      <input ref={input} type="search" placeholder="Search" />
     </form>
   );
 }
