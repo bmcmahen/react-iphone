@@ -44,7 +44,7 @@ export const Status = ({ isEditingApps, endEditing }: Props) => {
   });
 
   return (
-    <div>
+    <div className="Status">
       {transitions.map(({ item, key, props }) => {
         return (
           item && (
