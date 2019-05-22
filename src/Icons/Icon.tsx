@@ -37,6 +37,7 @@ export function Icon({
       <div
         {...bind}
         style={{
+          filter: active ? "brightness(0.8)" : "none",
           width: "60px",
           height: "78px",
           margin: "0 auto",

@@ -20,6 +20,7 @@ import messages from "./Icons/Messages.svg";
 import reminders from "./Icons/Reminders.svg";
 import weather from "./Icons/Weather.svg";
 import wallet from "./Icons/Wallet.svg";
+import { SearchPanel } from "./SearchPanel";
 
 interface AppState {
   [key: string]: Array<{
@@ -196,92 +197,95 @@ export function IOS() {
           width: "100%",
           boxSizing: "border-box",
           top: 0,
-          zIndex: 10,
+          zIndex: 150,
           padding: "1.35rem 1.75rem"
         }}
       >
         <Status isEditingApps={isEditingApps} endEditing={endEditing} />
       </div>
-      <GridContextProvider onChange={onSwap}>
-        <GestureView
-          className="Gesture__parent"
-          enableMouse
-          value={parentIndex}
-          id="parent"
-          onRequestChange={i => setParentIndex(i)}
-          onMoveShouldSet={onMoveShouldSetParent}
-          onTerminationRequest={onTerminationRequestParent}
-        >
-          <Pane>widget crap</Pane>
-          <div
-            onMouseDown={() => {
-              setDraggingApp(true);
-            }}
-            onMouseUp={() => {
-              setDraggingApp(false);
-            }}
-            style={{
-              flex: 1,
-              display: "flex",
-              flexDirection: "column",
-              position: "relative"
-            }}
+      <SearchPanel>
+        <GridContextProvider onChange={onSwap}>
+          <GestureView
+            className="Gesture__parent"
+            enableMouse
+            value={parentIndex}
+            id="parent"
+            onRequestChange={i => setParentIndex(i)}
+            onMoveShouldSet={onMoveShouldSetParent}
+            onTerminationRequest={onTerminationRequestParent}
           >
-            <GestureView
-              className="Gesture__apps"
-              id="child"
-              enableMouse
-              value={childIndex}
-              onRequestChange={i => setChildIndex(i)}
-            >
-              {Object.keys(apps)
-                .filter(key => key !== "dock")
-                .map(key => {
-                  return (
-                    <Pane key={key}>
-                      <GridDropZone
-                        disableDrag={!isEditingApps}
-                        boxesPerRow={4}
-                        rowHeight={105}
-                        id={key}
-                      >
-                        {apps[key].map(app => (
-                          <GridItem key={app.name}>
-                            {React.cloneElement(app.icon as any, {
-                              iconOnly: false
-                            })}
-                          </GridItem>
-                        ))}
-                      </GridDropZone>
-                    </Pane>
-                  );
-                })}
-            </GestureView>
+            <Pane>widget crap</Pane>
+
             <div
-              onMouseDown={e => {
-                e.stopPropagation();
+              onMouseDown={() => {
+                setDraggingApp(true);
+              }}
+              onMouseUp={() => {
+                setDraggingApp(false);
               }}
               style={{
-                position: "absolute",
-                bottom: 0,
-                left: 0,
-                right: 0,
-                zIndex: draggingApp ? -1 : 0
+                flex: 1,
+                display: "flex",
+                flexDirection: "column",
+                position: "relative"
               }}
             >
-              <Dots
-                count={Object.keys(apps).length - 1}
-                activeIndex={childIndex}
-              />
-              <Dock
-                disableDrag={!isEditingApps}
-                draggingApp={draggingApp}
-                items={apps.dock}
-              />
+              <GestureView
+                className="Gesture__apps"
+                id="child"
+                enableMouse
+                value={childIndex}
+                onRequestChange={i => setChildIndex(i)}
+              >
+                {Object.keys(apps)
+                  .filter(key => key !== "dock")
+                  .map(key => {
+                    return (
+                      <Pane key={key}>
+                        <GridDropZone
+                          disableDrag={!isEditingApps}
+                          boxesPerRow={4}
+                          rowHeight={105}
+                          id={key}
+                        >
+                          {apps[key].map(app => (
+                            <GridItem key={app.name}>
+                              {React.cloneElement(app.icon as any, {
+                                iconOnly: false
+                              })}
+                            </GridItem>
+                          ))}
+                        </GridDropZone>
+                      </Pane>
+                    );
+                  })}
+              </GestureView>
+              <div
+                onMouseDown={e => {
+                  e.stopPropagation();
+                }}
+                style={{
+                  position: "absolute",
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  zIndex: draggingApp ? -1 : 0
+                }}
+              >
+                <Dots
+                  count={Object.keys(apps).length - 1}
+                  activeIndex={childIndex}
+                />
+                <Dock
+                  disableDrag={!isEditingApps}
+                  draggingApp={draggingApp}
+                  items={apps.dock}
+                />
+              </div>
             </div>
-          </div>
-        </GestureView>
-      </GridContextProvider>
+          </GestureView>
+        </GridContextProvider>
+      </SearchPanel>
     </div>
   );
 }
