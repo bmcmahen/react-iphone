@@ -1,8 +1,14 @@
 .IOS {
-  border-radius: 2.5rem;
   position: relative;
   overflow: hidden;
 }
+
+@media (min-width: 768px) {
+  .IOS {
+    border-radius: 2.5rem;
+  }
+}
+
 .IOS .Gesture__parent {
   height: 100%;
   background-image: url(https://images.unsplash.com/photo-1557474295-8fbaa04b4fee?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80);

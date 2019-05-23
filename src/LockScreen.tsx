@@ -32,6 +32,9 @@ export function LockScreen({
 }: LockScreenProps) {
   const LOCK_THRESHOLD = height / 2;
 
+  const convert = linearConversion([height - 100, height], [12, 0]);
+  const blurFn = linearConversion([0, PANEL_THRESHOLD], [0, 20]);
+
   const ref = React.useRef(null);
   const rightSheet = React.useRef(false);
   const [showing, setShowing] = React.useState(showLockOnMount);
@@ -49,6 +52,12 @@ export function LockScreen({
   const [{ top }, setPanel] = useSpring(() => ({
     top: 0
   }));
+
+  React.useEffect(() => {
+    if (showing) {
+      setLock({ y: height, immediate: true });
+    }
+  }, [showing, height]);
 
   // handle drag end
   function onEnd(state: StateType) {
@@ -152,8 +161,6 @@ export function LockScreen({
       const rx = x - left;
       const ry = y - (top + window.scrollY);
 
-      console.log(x, left, rx);
-
       // moving down from top-left
       if (initialDirection[1] > 0 && ry < 30 && rx < width - 100) {
         rightSheet.current = false;
@@ -203,6 +210,7 @@ export function LockScreen({
       <animated.div
         className="LockScreen__blur-bg"
         style={{
+          // willChange: "filter",
           filter: top.interpolate(top => {
             return `blur(${blurFn(clamp(top, 0, PANEL_THRESHOLD))}px)`;
           })
@@ -212,7 +220,9 @@ export function LockScreen({
           aria-hidden={!showing}
           className="LockScreen__content"
           style={{
-            transform: y.interpolate(y => `translateY(${clamp(y, 0, 700)}px)`)
+            transform: y.interpolate(
+              y => `translateY(${clamp(y, 0, height)}px)`
+            )
           }}
         >
           <div>
@@ -220,12 +230,13 @@ export function LockScreen({
               className="LockScreen__blur-img"
               style={{
                 transform: y.interpolate({
-                  range: [0, 700],
+                  range: [0, height],
                   output: ["translateY(300px)", "translateY(0px)"],
                   extrapolate: "clamp"
                 }),
+                // willChange: "filter",
                 filter: y.interpolate(
-                  y => `blur(${convert(clamp(y, 600, 700))}px)`
+                  y => `blur(${convert(clamp(y, height - 100, height))}px)`
                 ),
                 backgroundImage: `url(https://images.unsplash.com/photo-1558424774-86401550d687?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80)`
               }}
@@ -286,6 +297,3 @@ export function LockScreen({
     </div>
   );
 }
-
-const convert = linearConversion([600, 700], [12, 0]);
-const blurFn = linearConversion([0, PANEL_THRESHOLD], [0, 20]);

@@ -1,8 +1,12 @@
 import * as React from "react";
 import "./About.css";
-import { Text, Button, IconArrowRight, Link } from "sancho";
+import { Text, Button, IconArrowRight, Link, IconZoomIn } from "sancho";
 
-export function AboutTitle() {
+export function AboutTitle({
+  setFullScreen
+}: {
+  setFullScreen: (value: boolean) => void;
+}) {
   return (
     <div className="AboutTitle">
       <Text variant="display3">React Gesture Responder</Text>
@@ -20,6 +24,17 @@ export function AboutTitle() {
       >
         Learn more on GitHub
       </Button>
+      <div>
+        <Button
+          className="Index__Button-fullscreen"
+          onPress={() => setFullScreen(true)}
+          variant="ghost"
+          intent="primary"
+          iconAfter={<IconZoomIn />}
+        >
+          Toggle fullscreen example
+        </Button>
+      </div>
     </div>
   );
 }

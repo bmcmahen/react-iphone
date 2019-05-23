@@ -45,12 +45,14 @@ interface AppState {
   }>;
 }
 
-export function IOS() {
-  const [phoneSize, setPhoneSize] = React.useState({
-    height: 700,
-    width: 375
-  });
+interface IOSProps {
+  phoneSize: {
+    height: number;
+    width: number;
+  };
+}
 
+export function IOS({ phoneSize }: IOSProps) {
   // controls the app icon panels
   const [childIndex, setChildIndex] = React.useState(0);
 
@@ -66,31 +68,6 @@ export function IOS() {
   function editApps() {
     setIsEditingApps(true);
   }
-
-  function setWindowSize() {
-    const h = window.innerHeight;
-    const w = window.innerWidth;
-
-    let dim = {
-      height: 700,
-      width: 375
-    };
-
-    if (h < 700) {
-      dim.height = h;
-    }
-
-    if (w < 375) {
-      dim.width = w;
-    }
-
-    setPhoneSize(dim);
-  }
-
-  React.useEffect(() => {
-    window.addEventListener("resize", setWindowSize);
-    return () => window.removeEventListener("resize", setWindowSize);
-  }, [setWindowSize]);
 
   // our initial app icon state. we could eventually save
   // this to localstorage or something
@@ -391,12 +368,18 @@ export function IOS() {
                 <LeftPane />
               </Pane>
 
-              {/* App icons gesture views */}
+              {/* App icons gesture views. A bit of a hack here to get zIndex working for the dock */}
               <div
                 onMouseDown={() => {
                   setDraggingApp(true);
                 }}
+                onTouchStart={() => {
+                  setDraggingApp(true);
+                }}
                 onMouseUp={() => {
+                  setDraggingApp(false);
+                }}
+                onTouchEnd={() => {
                   setDraggingApp(false);
                 }}
                 className="IOS__app-icons-container"
