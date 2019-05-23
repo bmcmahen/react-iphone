@@ -163,13 +163,13 @@ export function LockScreen({
       const ry = y - (top + window.scrollY);
 
       // moving down from top-left
-      if (initialDirection[1] > 0 && ry < 30 && rx < width - 100) {
+      if (initialDirection[1] > 0 && ry < 45 && rx < width - 100) {
         rightSheet.current = false;
         return true;
       }
 
       // // moving down from top-right
-      if (initialDirection[1] > 0 && ry < 30 && rx > width - 100) {
+      if (initialDirection[1] > 0 && ry < 45 && rx > width - 100) {
         rightSheet.current = true;
         return true;
       }
