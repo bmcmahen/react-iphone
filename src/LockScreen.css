@@ -105,7 +105,7 @@
 
 .LockScreen__toggle-background {
   pointer-events: none;
-  background: linear-gradient(to right, #ec6ead, #3494e6);
+  background: #5a5a5a;
   position: absolute;
   z-index: 10;
   top: 0;
