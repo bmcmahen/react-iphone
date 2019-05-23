@@ -10,9 +10,11 @@
 </div>
 <br />
 
-React iPhone is a react web application that attempts to partially replicate the iPhone gesture based navigation. It's built using [react-gesture-responder](https://github.com/bmcmahen/react-gesture-responder), [react-grid-dnd](https://github.com/bmcmahen/react-grid-dnd), [touchable-hook](https://github.com/bmcmahen/touchable-hook), [react-gesture-view](https://github.com/bmcmahen/react-gesture-view), and [react-spring](https://www.react-spring.io/).
+React iPhone is a react web application that attempts to partially replicate the iPhone gesture based navigation. 
 
 [Click here](https://react-gesture-responder.netlify.com/) to see it in action.
+
+React iPhone is built using [react-gesture-responder](https://github.com/bmcmahen/react-gesture-responder), [react-grid-dnd](https://github.com/bmcmahen/react-grid-dnd), [touchable-hook](https://github.com/bmcmahen/touchable-hook), [react-gesture-view](https://github.com/bmcmahen/react-gesture-view), and [react-spring](https://www.react-spring.io/).
 
 What's the point of this project? To demonstrate that complex gesture based interfaces are possible on the web!
 
