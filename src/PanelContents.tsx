@@ -30,7 +30,7 @@ function PanelBox({ showing, i }: { i: number; showing: boolean }) {
   const props = useSpring({
     transform: showing ? "scale(1)" : "scale(0.8)",
     opacity: showing ? 1 : 0,
-    delay: showing ? (7 - i) * 10 : i * 10
+    delay: !showing ? (7 - i) * 20 : i * 20
   });
   return (
     <animated.div

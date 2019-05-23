@@ -101,8 +101,20 @@ export function LockScreen({
     }
 
     if (showing) {
-      if (state.initialDirection[1] < 0 && state.velocity > 0.25) {
+      if (
+        state.direction[1] < 0 &&
+        state.initialDirection[1] < 0 &&
+        state.velocity > 0.25
+      ) {
         return close();
+      }
+    } else {
+      if (
+        state.direction[1] > 0 &&
+        state.initialDirection[1] > 0 &&
+        state.velocity > 0.25
+      ) {
+        return open();
       }
     }
 
