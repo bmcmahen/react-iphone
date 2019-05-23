@@ -8,6 +8,7 @@ import { Status, formatAMPM } from "./Status";
 import "./LockScreen.css";
 import { format } from "date-fns";
 import { PanelContents } from "./PanelContents";
+import lock from "./lock.jpg";
 
 const PANEL_THRESHOLD = 150;
 
@@ -238,7 +239,7 @@ export function LockScreen({
                 filter: y.interpolate(
                   y => `blur(${convert(clamp(y, height - 100, height))}px)`
                 ),
-                backgroundImage: `url(https://images.unsplash.com/photo-1558424774-86401550d687?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80)`
+                backgroundImage: `url(${lock})`
               }}
             />
             <div className="LockScreen__status-container">
