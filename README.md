@@ -1,4 +1,5 @@
 # React-iPhone
+[![Follow on Twitter](https://img.shields.io/twitter/follow/benmcmahen.svg?style=social&logo=twitter)](https://twitter.com/intent/follow?screen_name=benmcmahen)
 
 <div align="center">
   <a href="http://react-gesture-responder.netlify.com">
