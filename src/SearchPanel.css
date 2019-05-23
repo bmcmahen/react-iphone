@@ -15,7 +15,7 @@
 }
 
 .SearchPanel__body-content {
-  background-color: #827877bd;
+  background: linear-gradient(to right, #ec6ead, #3494e6);
   position: absolute;
   top: 0;
   left: 0;

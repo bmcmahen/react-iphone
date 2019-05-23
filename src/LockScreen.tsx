@@ -34,7 +34,7 @@ export function LockScreen({
   const LOCK_THRESHOLD = height / 2;
 
   const convert = linearConversion([height - 100, height], [12, 0]);
-  const blurFn = linearConversion([0, PANEL_THRESHOLD], [0, 20]);
+  const blurFn = linearConversion([0, PANEL_THRESHOLD], [0, 15]);
 
   const ref = React.useRef(null);
   const rightSheet = React.useRef(false);
@@ -194,10 +194,21 @@ export function LockScreen({
   return (
     <div ref={ref} className="LockScreen" {...bind}>
       <animated.div
+        className="LockScreen__toggle-background"
+        style={{
+          opacity: top.interpolate({
+            range: [0, PANEL_THRESHOLD],
+            output: [0, 0.8],
+            extrapolate: "clamp"
+          })
+        }}
+      />
+      <animated.div
         className="LockScreen__toggle-container"
         aria-hidden={!showingPanel}
         style={{
           pointerEvents: showingPanel ? "auto" : "none",
+
           transform: top.interpolate({
             range: [0, PANEL_THRESHOLD],
             output: ["translateY(-100px)", "translateY(0)"],

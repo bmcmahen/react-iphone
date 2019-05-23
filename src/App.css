@@ -63,3 +63,7 @@
   left: 0;
   right: 0;
 }
+
+.Gesture__parent .Gesture-view__animated-container {
+  height: 100%;
+}

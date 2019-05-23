@@ -384,7 +384,6 @@ export function IOS({ phoneSize }: IOSProps) {
                 }}
                 className="IOS__app-icons-container"
               >
-                {/* Slides down when invoking search panel */}
                 <animated.div
                   className="IOS__app-icons-slide"
                   style={{

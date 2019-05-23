@@ -58,6 +58,7 @@ export function SearchPanel({ disable, children, y, set }: Props) {
       if (disable) {
         return false;
       }
+
       if (state.initialDirection[1] > 0 && showing) {
         return false;
       }
@@ -66,7 +67,10 @@ export function SearchPanel({ disable, children, y, set }: Props) {
         return false;
       }
 
-      if (state.initialDirection[1] !== 0) {
+      if (
+        Math.abs(state.initialDirection[1]) >
+        Math.abs(state.initialDirection[0])
+      ) {
         return true;
       }
 
@@ -136,7 +140,7 @@ export function SearchPanel({ disable, children, y, set }: Props) {
         style={{
           opacity: y.interpolate({
             range: [0, THRESHOLD / 2],
-            output: [0, 1],
+            output: [0, 0.8],
             extrapolate: "clamp"
           })
         }}
