@@ -46,6 +46,11 @@ interface AppState {
 }
 
 export function IOS() {
+  const [phoneSize, setPhoneSize] = React.useState({
+    height: 700,
+    width: 375
+  });
+
   // controls the app icon panels
   const [childIndex, setChildIndex] = React.useState(0);
 
@@ -61,6 +66,31 @@ export function IOS() {
   function editApps() {
     setIsEditingApps(true);
   }
+
+  function setWindowSize() {
+    const h = window.innerHeight;
+    const w = window.innerWidth;
+
+    let dim = {
+      height: 700,
+      width: 375
+    };
+
+    if (h < 700) {
+      dim.height = h;
+    }
+
+    if (w < 375) {
+      dim.width = w;
+    }
+
+    setPhoneSize(dim);
+  }
+
+  React.useEffect(() => {
+    window.addEventListener("resize", setWindowSize);
+    return () => window.removeEventListener("resize", setWindowSize);
+  }, [setWindowSize]);
 
   // our initial app icon state. we could eventually save
   // this to localstorage or something
@@ -327,11 +357,19 @@ export function IOS() {
 
   return (
     <div
+      style={{
+        height: phoneSize.height + "px",
+        width: phoneSize.width + "px"
+      }}
       className={cx("IOS", {
         "IOS--editing": isEditingApps
       })}
     >
-      <LockScreen showLockOnMount>
+      <LockScreen
+        height={phoneSize.height}
+        width={phoneSize.width}
+        showLockOnMount
+      >
         {/* Status bar * */}
         <div className="IOS__status-container">
           <Status isEditingApps={isEditingApps} endEditing={endEditing} />
@@ -384,6 +422,7 @@ export function IOS() {
                   >
                     {Object.keys(apps)
                       .filter(key => key !== "dock")
+                      .sort()
                       .map(key => {
                         return (
                           <Pane key={key}>

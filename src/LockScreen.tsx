@@ -9,12 +9,13 @@ import "./LockScreen.css";
 import { format } from "date-fns";
 import { PanelContents } from "./PanelContents";
 
-const LOCK_THRESHOLD = 700 / 2;
 const PANEL_THRESHOLD = 150;
 
 interface LockScreenProps {
   children: React.ReactNode;
   showLockOnMount?: boolean;
+  height: number;
+  width: number;
 }
 
 /**
@@ -25,8 +26,12 @@ interface LockScreenProps {
 
 export function LockScreen({
   children,
+  height,
+  width,
   showLockOnMount = false
 }: LockScreenProps) {
+  const LOCK_THRESHOLD = height / 2;
+
   const ref = React.useRef(null);
   const rightSheet = React.useRef(false);
   const [showing, setShowing] = React.useState(showLockOnMount);
@@ -37,7 +42,7 @@ export function LockScreen({
 
   // lock screen spring
   const [{ y }, setLock] = useSpring(() => ({
-    y: showLockOnMount ? 700 : 0
+    y: showLockOnMount ? height : 0
   }));
 
   // toggle screen spring
@@ -73,11 +78,11 @@ export function LockScreen({
     }
 
     // handle drag end for lock screen
-    const ry = showing ? 700 + y : y;
+    const ry = showing ? height + y : y;
 
     function open() {
       setShowing(true);
-      setLock({ y: 700, immediate: false });
+      setLock({ y: height, immediate: false });
     }
 
     function close() {
@@ -127,7 +132,7 @@ export function LockScreen({
       }
 
       setLock({
-        y: showing ? 700 + state.delta[1] : state.delta[1],
+        y: showing ? height + state.delta[1] : state.delta[1],
         immediate: true
       });
     },
@@ -150,13 +155,13 @@ export function LockScreen({
       console.log(x, left, rx);
 
       // moving down from top-left
-      if (initialDirection[1] > 0 && ry < 30 && rx < 240) {
+      if (initialDirection[1] > 0 && ry < 30 && rx < width - 100) {
         rightSheet.current = false;
         return true;
       }
 
       // // moving down from top-right
-      if (initialDirection[1] > 0 && ry < 30 && rx > 240) {
+      if (initialDirection[1] > 0 && ry < 30 && rx > width - 100) {
         rightSheet.current = true;
         return true;
       }

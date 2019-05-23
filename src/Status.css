@@ -13,6 +13,7 @@
   height: 24px;
   outline: none;
   font-size: 14px;
+  border: none;
   color: rgba(0, 0, 0, 0.6);
   padding: 0 0.5rem;
   cursor: pointer;

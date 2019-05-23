@@ -1,4 +1,6 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# React-iPhone
+
+React iPhone is a react web application that attempts to replicate the iPhone gesture based navigation. It's built using [react-gesture-responder](https://github.com/bmcmahen/react-gesture-responder), [react-grid-dnd](https://github.com/bmcmahen/react-grid-dnd), [touchable-hook](https://github.com/bmcmahen/touchable-hook), [react-gesture-view](https://github.com/bmcmahen/react-gesture-view), and [react-spring](https://www.react-spring.io/).
 
 ## Available Scripts
 

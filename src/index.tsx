@@ -1,20 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import { IOS } from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { AboutTitle, About } from "./About";
+import cx from "classnames";
 
-ReactDOM.render(
-  <div className="Index">
-    <AboutTitle />
-    <div className="Index__ios">
-      <IOS />
+function Layout() {
+  const [fullscreen, setFullScreen] = useState(false);
+
+  return (
+    <div
+      className={cx("Index", {
+        fullscreen
+      })}
+    >
+      <button onClick={() => setFullScreen(true)}>set full screen</button>
+      <AboutTitle />
+      <div className="Index__ios">
+        <IOS />
+      </div>
+      <About />
     </div>
-    <About />
-  </div>,
-  document.getElementById("root")
-);
+  );
+}
+
+ReactDOM.render(<Layout />, document.getElementById("root"));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

@@ -43,6 +43,7 @@
   color: white;
   padding: 0 1rem;
   padding-left: 2rem;
+  -webkit-appearance: none;
 }
 
 .SearchInput svg {

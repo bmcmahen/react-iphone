@@ -1,9 +1,7 @@
 .IOS {
-  height: 700px;
   border-radius: 2.5rem;
   position: relative;
   overflow: hidden;
-  width: 375px !important;
 }
 .IOS .Gesture__parent {
   height: 100%;

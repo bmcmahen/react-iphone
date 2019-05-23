@@ -1,13 +1,13 @@
 .PanelBox:first-child,
 .PanelBox:nth-child(2) {
-  width: 146px;
+  width: calc(50% - 16px);
   height: 146px;
 }
 
 .PanelBox {
   margin: 8px;
-  width: 65px;
-  height: 65px;
+  width: calc(25% - 16px);
+  padding-bottom: 20%;
   transform-origin: 50%;
   background: #4b4e4e;
   border-radius: 1rem;

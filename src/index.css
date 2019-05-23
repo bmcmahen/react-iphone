@@ -53,3 +53,17 @@ code {
 .Index .AboutTitle .lead {
   /* max-width: 37rem; */
 }
+
+.Index.fullscreen .AboutTitle,
+.Index.fullscreen .About,
+.Index.fullscreen button {
+  display: none;
+}
+
+.Index.fullscreen .Index__ios {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
