@@ -1,3 +1,9 @@
 .AboutTitle a {
   margin-top: 1rem;
 }
+
+.About__divider {
+  border-top: 1px solid rgba(0, 0, 0, 0.2);
+  margin-top: 1rem;
+  padding-top: 1rem;
+}

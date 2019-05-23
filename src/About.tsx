@@ -24,7 +24,7 @@ export function AboutTitle({
       >
         Learn more on GitHub
       </Button>
-      <div>
+      <div className="About__divider">
         <Button
           className="Index__Button-fullscreen"
           onPress={() => setFullScreen(true)}
