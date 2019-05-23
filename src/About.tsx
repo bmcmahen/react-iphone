@@ -3,12 +3,13 @@ import "./About.css";
 import { Text, Button, IconArrowRight, Link, IconZoomIn } from "sancho";
 
 export function AboutTitle({
-  setFullScreen
+  setFullScreen,
+  ...other
 }: {
   setFullScreen: (value: boolean) => void;
 }) {
   return (
-    <div className="AboutTitle">
+    <div className="AboutTitle" {...other}>
       <Text variant="display3">React Gesture Responder</Text>
       <Text className="lead" gutter variant="lead">
         React-gesture-responder is a responder system for your react application
@@ -24,6 +25,7 @@ export function AboutTitle({
       >
         Learn more on GitHub
       </Button>
+
       <div className="About__divider">
         <Button
           className="Index__Button-fullscreen"
@@ -39,9 +41,9 @@ export function AboutTitle({
   );
 }
 
-export function About() {
+export function About(props: any) {
   return (
-    <div className="About">
+    <div className="About" {...props}>
       <Text variant="paragraph" muted>
         Built by <Link href="https://twitter.com/BenMcMahen">Ben McMahen</Link>
         <br />

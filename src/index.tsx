@@ -62,7 +62,10 @@ function Layout() {
         fullscreen
       })}
     >
-      <AboutTitle setFullScreen={v => setFullScreen(v)} />
+      <AboutTitle
+        aria-hidden={fullscreen}
+        setFullScreen={v => setFullScreen(v)}
+      />
 
       <div className="Index__ios">
         {fullscreen && (
@@ -77,7 +80,7 @@ function Layout() {
         )}
         <IOS phoneSize={phoneSize} />
       </div>
-      <About />
+      <About aria-hidden={fullscreen} />
     </div>
   );
 }
