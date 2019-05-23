@@ -9,7 +9,6 @@ import { Button, IconZoomIn, CloseButton } from "sancho";
 
 function Layout() {
   const [fullscreen, setFullScreen] = useState(false);
-  const [mounted, setMounted] = useState(false);
 
   React.useEffect(() => {
     function preventBehavior(e: any) {
@@ -52,14 +51,13 @@ function Layout() {
     }
 
     setPhoneSize(dim);
-    setMounted(true);
   }
 
   React.useEffect(() => {
     setWindowSize();
     window.addEventListener("resize", setWindowSize);
     return () => window.removeEventListener("resize", setWindowSize);
-  }, [fullscreen, setWindowSize]);
+  }, [fullscreen]);
 
   return (
     <div

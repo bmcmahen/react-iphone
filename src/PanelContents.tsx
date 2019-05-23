@@ -14,22 +14,23 @@ export function PanelContents({ showing }: PanelContentsProps) {
         <Status endEditing={() => {}} isEditingApps={false} />
       </div>
       <div className="PanelContents__boxes">
-        <PanelBox showing={showing} />
-        <PanelBox showing={showing} />
-        <PanelBox showing={showing} />
-        <PanelBox showing={showing} />
-        <PanelBox showing={showing} />
-        <PanelBox showing={showing} />
-        <PanelBox showing={showing} />
+        <PanelBox i={0} showing={showing} />
+        <PanelBox i={1} showing={showing} />
+        <PanelBox i={2} showing={showing} />
+        <PanelBox i={3} showing={showing} />
+        <PanelBox i={4} showing={showing} />
+        <PanelBox i={5} showing={showing} />
+        <PanelBox i={6} showing={showing} />
       </div>
     </div>
   );
 }
 
-function PanelBox({ showing }: { showing: boolean }) {
+function PanelBox({ showing, i }: { i: number; showing: boolean }) {
   const props = useSpring({
     transform: showing ? "scale(1)" : "scale(0.8)",
-    opacity: showing ? 1 : 0
+    opacity: showing ? 1 : 0,
+    delay: showing ? (7 - i) * 10 : i * 10
   });
   return (
     <animated.div

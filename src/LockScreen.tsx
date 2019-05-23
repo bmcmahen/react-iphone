@@ -185,7 +185,6 @@ export function LockScreen({
     const timer = setInterval(() => {
       setTime(formatAMPM());
     }, 1000);
-
     return () => {
       clearTimeout(timer);
     };
@@ -197,7 +196,7 @@ export function LockScreen({
         className="LockScreen__toggle-background"
         style={{
           opacity: top.interpolate({
-            range: [0, PANEL_THRESHOLD],
+            range: [0, PANEL_THRESHOLD / 2],
             output: [0, 0.8],
             extrapolate: "clamp"
           })
