@@ -41,12 +41,14 @@ function Layout() {
       width: 375
     };
 
-    if (h < 800) {
-      dim.height = h;
-    }
+    if (fullscreen) {
+      if (h < 700) {
+        dim.height = h;
+      }
 
-    if (w < 475) {
-      dim.width = w;
+      if (w < 375) {
+        dim.width = w;
+      }
     }
 
     setPhoneSize(dim);
@@ -57,7 +59,7 @@ function Layout() {
     setWindowSize();
     window.addEventListener("resize", setWindowSize);
     return () => window.removeEventListener("resize", setWindowSize);
-  }, [setWindowSize]);
+  }, [fullscreen, setWindowSize]);
 
   return (
     <div
