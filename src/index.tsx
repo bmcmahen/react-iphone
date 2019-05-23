@@ -41,7 +41,7 @@ function Layout() {
     };
 
     if (fullscreen) {
-      if (w < 375) {
+      if (w < 375 || h < 700) {
         dim.width = w;
         dim.height = h;
       }
