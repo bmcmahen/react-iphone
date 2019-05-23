@@ -101,7 +101,7 @@ export function LockScreen({
     }
 
     if (showing) {
-      if (state.initialDirection[1] < 0 && state.velocity > 2) {
+      if (state.initialDirection[1] < 0 && state.velocity > 0.25) {
         return close();
       }
     }
@@ -211,7 +211,7 @@ export function LockScreen({
       <animated.div
         className="LockScreen__blur-bg"
         style={{
-          // willChange: "filter",
+          willChange: "filter",
           filter: top.interpolate(top => {
             return `blur(${blurFn(clamp(top, 0, PANEL_THRESHOLD))}px)`;
           })
@@ -235,7 +235,7 @@ export function LockScreen({
                   output: ["translateY(300px)", "translateY(0px)"],
                   extrapolate: "clamp"
                 }),
-                // willChange: "filter",
+                willChange: "filter",
                 filter: y.interpolate(
                   y => `blur(${convert(clamp(y, height - 100, height))}px)`
                 ),

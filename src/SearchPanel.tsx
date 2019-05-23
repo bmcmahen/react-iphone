@@ -182,11 +182,11 @@ function BoxPane({
 export function SearchInput({ showing }: { showing: boolean }) {
   const input = React.useRef<HTMLInputElement>(null);
 
-  React.useEffect(() => {
-    if (showing) {
-      input.current!.focus();
-    }
-  }, [showing]);
+  // React.useEffect(() => {
+  //   if (showing) {
+  //     // input.current!.focus();
+  //   }
+  // }, [showing]);
 
   return (
     <form className="SearchInput">
