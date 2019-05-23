@@ -7,3 +7,11 @@
   margin-top: 1rem;
   padding-top: 1rem;
 }
+
+.AboutTitle h1 {
+  color: #1f74c3;
+}
+
+.AboutTitle .lead {
+  color: #5f6871;
+}
